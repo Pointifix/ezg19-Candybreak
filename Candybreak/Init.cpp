@@ -68,6 +68,7 @@ int init()
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -95,5 +96,7 @@ int init()
 		ISoundEngine *SoundEngine = createIrrKlangDevice();
 
 		SoundEngine->play2D("../assets/Candyland-Tobu.mp3", false);
-	}	
+	}
+
+	return 0;
 }
