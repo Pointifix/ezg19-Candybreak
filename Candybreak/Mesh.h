@@ -21,10 +21,6 @@ struct Vertex {
 	glm::vec3 Normal;
 	// texCoords
 	glm::vec2 TexCoords;
-	// tangent
-	glm::vec3 Tangent;
-	// bitangent
-	glm::vec3 Bitangent;
 };
 
 struct Texture {

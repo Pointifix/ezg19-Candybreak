@@ -61,10 +61,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="simple.vert">
+    <None Include="..\shader\simple.frag">
       <Filter>Ressourcendateien</Filter>
     </None>
-    <None Include="simple.frag">
+    <None Include="..\shader\simple.vert">
       <Filter>Ressourcendateien</Filter>
     </None>
   </ItemGroup>

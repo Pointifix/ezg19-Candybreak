@@ -4,6 +4,7 @@
 #include "Init.h"
 
 #include <iostream>
+
 #include <Windows.h>
 
 #include <glad/glad.h>
@@ -77,6 +78,9 @@ int init()
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
+
+	// tell GLFW to capture our mouse
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// enable or disable console (presentation purpose)
 	// ------------------------------------------------
