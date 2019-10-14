@@ -13,9 +13,10 @@
 #include <irrKlang/irrKlang.h>
 #include "InputHandler.h"
 
-GLFWwindow* window;
-
 using namespace irrklang;
+
+GLFWwindow* window;
+ISoundEngine *SoundEngine;
 
 namespace setting
 {
@@ -44,7 +45,7 @@ int init()
 	setting::SCREEN_WIDTH = reader.GetInteger("window", "width", 1024);
 	setting::SCREEN_HEIGHT = reader.GetInteger("window", "height", 768);
 	setting::FULLSCREEN = reader.GetBoolean("window", "fullscreen", false);
-	setting::TITLE = reader.Get("window", "title", "Wingman");
+	setting::TITLE = reader.Get("window", "title", "Candybreak");
 	setting::REFRESH_RATE = reader.GetReal("window", "refresh rate", 60);
 	setting::BRIGHTNESS = float(reader.GetReal("window", "brightness", 1.0));
 	setting::FREE_CAMERA = reader.GetBoolean("camera", "free", true);
@@ -95,12 +96,10 @@ int init()
 
 	// enable or disable theme song (presentation purpose)
 	// ---------------------------------------------------
-	if (setting::THEME)
-	{
-		ISoundEngine *SoundEngine = createIrrKlangDevice();
+	SoundEngine = createIrrKlangDevice();
 
-		SoundEngine->play2D("../assets/Candyland-Tobu.mp3", false);
-	}
+	if (!setting::THEME)
+		SoundEngine->setSoundVolume(0.0f);
 
 	return 0;
 }

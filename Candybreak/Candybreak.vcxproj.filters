@@ -36,6 +36,9 @@
     <ClInclude Include="Breakout.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Candybreak.cpp">
@@ -65,12 +68,21 @@
     <ClCompile Include="Breakout.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\shader\simple.frag">
       <Filter>Ressourcendateien</Filter>
     </None>
     <None Include="..\shader\simple.vert">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\skybox.frag">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\skybox.vert">
       <Filter>Ressourcendateien</Filter>
     </None>
   </ItemGroup>
