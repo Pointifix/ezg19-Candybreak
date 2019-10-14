@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Breakout.h" />
     <ClInclude Include="FreeCamera.h" />
     <ClInclude Include="Init.h" />
     <ClInclude Include="InputHandler.h" />
@@ -166,6 +167,7 @@
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Breakout.cpp" />
     <ClCompile Include="Candybreak.cpp" />
     <ClCompile Include="FreeCamera.cpp" />
     <ClCompile Include="glad.c" />
