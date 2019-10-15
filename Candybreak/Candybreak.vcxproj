@@ -164,6 +164,7 @@
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skybox.h" />
   </ItemGroup>
@@ -176,10 +177,15 @@
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\shader\particle.comp" />
+    <None Include="..\shader\particle.frag" />
+    <None Include="..\shader\particle.geom" />
+    <None Include="..\shader\particle.vert" />
     <None Include="..\shader\simple.frag" />
     <None Include="..\shader\simple.vert" />
     <None Include="..\shader\skybox.frag" />

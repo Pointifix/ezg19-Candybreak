@@ -9,6 +9,7 @@ Model::Model(string const &path, bool gamma) : gammaCorrection(gamma)
 
 Model::~Model()
 {
+
 }
 
 void Model::Draw(Shader shader)

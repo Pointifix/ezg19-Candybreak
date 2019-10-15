@@ -29,5 +29,7 @@ void Breakout::boundaryCheck()
 		if (distanceToBoundary < 0) {
 			this->Direction = glm::reflect(this->Direction, glm::vec3(BOUNDARIES[i]));
 		}
+
+		//TODO CHECK DOT PRODUCT TO AVOID DOUBLE REFLECTS
 	}
 }

@@ -39,6 +39,9 @@
     <ClInclude Include="Skybox.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Candybreak.cpp">
@@ -71,6 +74,9 @@
     <ClCompile Include="Skybox.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\shader\simple.frag">
@@ -83,6 +89,18 @@
       <Filter>Ressourcendateien</Filter>
     </None>
     <None Include="..\shader\skybox.vert">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\particle.comp">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\particle.geom">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\particle.vert">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\particle.frag">
       <Filter>Ressourcendateien</Filter>
     </None>
   </ItemGroup>

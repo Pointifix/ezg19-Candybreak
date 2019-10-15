@@ -11,7 +11,7 @@ class Shader
 public:
 	unsigned int ID;
 
-	Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
+	Shader(const char* vertexPath = nullptr, const char* fragmentPath = nullptr, const char* geometryPath = nullptr, const char* computePath = nullptr);
 	~Shader();
 
 	void use();
@@ -28,6 +28,9 @@ public:
 	void setMat3(const std::string &name, const glm::mat3 &mat) const;
 	void setMat4(const std::string &name, const glm::mat4 &mat) const;
 private:
+	void readShaderCode(const char* path, std::string &code);
+	GLuint createShader(const char* code, GLenum type);
+
 	void checkCompileErrors(GLuint shader, std::string type);
 };
 
