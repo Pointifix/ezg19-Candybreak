@@ -11,7 +11,7 @@ void main() {
 
 	vec3 up = vec3(V[0][1], V[1][1], V[2][1]);
 
-	float size = 5;
+	float size = 0.1;
 
     vec3 P = gl_in[0].gl_Position.xyz;
 

@@ -3,6 +3,8 @@
 
 ParticleSystem::ParticleSystem(glm::vec3 position, int particleCount)
 {
+	this->particle_count = particleCount;
+
 	particleShader = std::make_unique<Shader>("../shader/particle.vert", "../shader/particle.frag", "../shader/particle.geom");
 	computeShader = std::make_unique<Shader>(nullptr, nullptr, nullptr, "../shader/particle.comp");
 
@@ -36,16 +38,20 @@ ParticleSystem::ParticleSystem(glm::vec3 position, int particleCount)
 
 	std::vector<glm::vec4> positions;
 	std::vector<glm::vec4> velocities;
-	positions.push_back(glm::vec4(position, 1));
-	velocities.push_back(glm::vec4(0, 0, 0, 1));
-	particle_count = positions.size();
+
+	for (int i = 0; i < this->particle_count; i++) {
+		positions.push_back(glm::vec4(position, 1));
+		velocities.push_back(glm::vec4(std::rand() % 20 - 10, std::rand() % 20 - 10, std::rand() % 20 - 10, 1));
+	}
+
+	current_particle_count = positions.size();
 
 	// copy the data to the SSBO:
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo_pos[0]);
-	glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, particle_count * sizeof(positions[0]), &positions[0]);
+	glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, current_particle_count * sizeof(positions[0]), &positions[0]);
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo_vel[0]);
-	glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, particle_count * sizeof(velocities[0]), &velocities[0]);
+	glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, current_particle_count * sizeof(velocities[0]), &velocities[0]);
 
 	const GLuint position_layout = 0;
 	glGenVertexArrays(2, vaos);
@@ -68,6 +74,44 @@ ParticleSystem::~ParticleSystem()
 	particleShader.reset();
 }
 
+void ParticleSystem::update(float deltaTime, glm::mat4& model)
+{
+	computeShader->use();
+
+	computeShader->setFloat("deltaTime", deltaTime);
+	computeShader->setUnsignedInt("particleCount", current_particle_count);
+	computeShader->setUnsignedInt("maxParticles", MAX_PARTICLES);
+
+	// set SSBO and atomic counters
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo_pos[currentSSBO]);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo_vel[currentSSBO]);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, ssbo_pos[!currentSSBO]);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo_vel[!currentSSBO]);
+
+	glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 4, atomic_counter);
+
+	currentSSBO = !currentSSBO;
+	// Execute compute shader with a 16 x 16 work group size
+	GLuint groups = (current_particle_count / (16 * 16)) + 1;
+	glDispatchCompute(groups, 1, 1);
+
+	glMemoryBarrier(GL_ATOMIC_COUNTER_BARRIER_BIT);
+
+	// Read atomic counter through a temporary buffer
+	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomic_counter);
+	glBindBuffer(GL_COPY_WRITE_BUFFER, temp_buffer);
+	// from atomic counter to temp buffer:
+	glCopyBufferSubData(GL_ATOMIC_COUNTER_BUFFER, GL_COPY_WRITE_BUFFER, 0, 0, sizeof(GLuint));
+	GLuint *counterValue = (GLuint*)glMapBufferRange(GL_COPY_WRITE_BUFFER, 0, sizeof(GLuint), GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
+	current_particle_count = counterValue[0];
+
+	counterValue[0] = 0;
+	glUnmapBuffer(GL_COPY_WRITE_BUFFER);
+
+	glCopyBufferSubData(GL_COPY_WRITE_BUFFER, GL_ATOMIC_COUNTER_BUFFER, 0, 0, sizeof(GLuint));
+	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
+}
+
 void ParticleSystem::draw(glm::mat4& view, glm::mat4& projection)
 {
 	glEnable(GL_BLEND);
@@ -81,9 +125,9 @@ void ParticleSystem::draw(glm::mat4& view, glm::mat4& projection)
 	particleShader->setVec3("CameraRight_worldspace", view[0][0], view[1][0], view[2][0]);
 	particleShader->setVec3("CameraUp_worldspace", view[0][1], view[1][1], view[2][1]);
 
-	glBindVertexArray(vaos[0]);
+	glBindVertexArray(vaos[currentSSBO]);
 	glPointSize(10);
-	glDrawArrays(GL_POINTS, 0, particle_count);
+	glDrawArrays(GL_POINTS, 0, current_particle_count);
 	glBindVertexArray(0);
 	glUseProgram(0);
 

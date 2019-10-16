@@ -24,7 +24,32 @@ layout(std430, binding = 3) buffer Vel2
 
 layout (binding = 4, offset = 0) uniform atomic_uint Count;
 
+uniform uint particleCount;
+uniform uint maxParticles;
+uniform float deltaTime;
+
+void addParticleToOutputList(vec3 pos, vec3 vel, float TTL) {
+	uint nr = atomicCounterIncrement(Count);
+	if (nr >= maxParticles) {
+		atomicCounterDecrement(Count);
+		return;
+	}
+
+	Position_Out[nr] = vec4(pos, TTL);
+	Velocity_Out[nr] = vec4(vel, 0);
+}
 void main(void)
 {
-	
+	uint idx = gl_GlobalInvocationID.x + gl_GlobalInvocationID.y * gl_NumWorkGroups.x *	gl_WorkGroupSize.x;
+
+	if(idx >= particleCount) return;
+
+	vec3 velocity = Velocity_In[idx].xyz;
+	vec3 pos = Position_In[idx].xyz + deltaTime * velocity;
+	float TTL = Position_In[idx].w - deltaTime;
+
+	if (TTL > 0) 
+	{
+		addParticleToOutputList(pos, velocity, TTL);
+	}
 }
