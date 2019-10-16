@@ -37,7 +37,8 @@ void addParticleToOutputList(vec3 pos, vec3 vel, float TTL) {
 
 	Position_Out[nr] = vec4(pos, TTL);
 	Velocity_Out[nr] = vec4(vel, 0);
-}
+}
+
 void main(void)
 {
 	uint idx = gl_GlobalInvocationID.x + gl_GlobalInvocationID.y * gl_NumWorkGroups.x *	gl_WorkGroupSize.x;

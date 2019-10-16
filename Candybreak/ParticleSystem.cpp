@@ -40,8 +40,15 @@ ParticleSystem::ParticleSystem(glm::vec3 position, int particleCount)
 	std::vector<glm::vec4> velocities;
 
 	for (int i = 0; i < this->particle_count; i++) {
-		positions.push_back(glm::vec4(position, 1));
-		velocities.push_back(glm::vec4(std::rand() % 20 - 10, std::rand() % 20 - 10, std::rand() % 20 - 10, 1));
+		positions.push_back(glm::vec4(position, 3));
+		glm::vec3 velocity(static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * 20 - 10, static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * 20 - 10, static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * 20 - 10);
+		
+		if (glm::length(velocity) > 4.0)
+		{
+			velocity /= (glm::length(velocity) / 4);
+		}
+
+		velocities.push_back(glm::vec4(velocity, 1));
 	}
 
 	current_particle_count = positions.size();
@@ -115,8 +122,7 @@ void ParticleSystem::update(float deltaTime, glm::mat4& model)
 void ParticleSystem::draw(glm::mat4& view, glm::mat4& projection)
 {
 	glEnable(GL_BLEND);
-	glDepthMask(GL_FALSE);
-	glBlendFunc(GL_SRC_COLOR, GL_ONE);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	particleShader->use();
 
@@ -126,12 +132,10 @@ void ParticleSystem::draw(glm::mat4& view, glm::mat4& projection)
 	particleShader->setVec3("CameraUp_worldspace", view[0][1], view[1][1], view[2][1]);
 
 	glBindVertexArray(vaos[currentSSBO]);
-	glPointSize(10);
 	glDrawArrays(GL_POINTS, 0, current_particle_count);
 	glBindVertexArray(0);
 	glUseProgram(0);
 
-	glDepthMask(GL_TRUE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 }
