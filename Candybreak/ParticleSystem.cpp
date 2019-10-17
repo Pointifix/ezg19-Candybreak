@@ -39,13 +39,16 @@ ParticleSystem::ParticleSystem(glm::vec3 position, int particleCount)
 	std::vector<glm::vec4> positions;
 	std::vector<glm::vec4> velocities;
 
+	float maxSpeed = 30.0f;
+	float maxTTL = 2.0f;
+
 	for (int i = 0; i < this->particle_count; i++) {
-		positions.push_back(glm::vec4(position, 3));
-		glm::vec3 velocity(static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * 20 - 10, static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * 20 - 10, static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * 20 - 10);
+		positions.push_back(glm::vec4(position, static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * maxTTL));
+		glm::vec3 velocity(static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * maxSpeed - maxSpeed / 2, static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * maxSpeed - maxSpeed / 2, static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * maxSpeed - maxSpeed / 2);
 		
-		if (glm::length(velocity) > 4.0)
+		if (glm::length(velocity) > maxSpeed / 2)
 		{
-			velocity /= (glm::length(velocity) / 4);
+			velocity /= (glm::length(velocity) / (maxSpeed / 2));
 		}
 
 		velocities.push_back(glm::vec4(velocity, 1));
@@ -81,7 +84,7 @@ ParticleSystem::~ParticleSystem()
 	particleShader.reset();
 }
 
-void ParticleSystem::update(float deltaTime, glm::mat4& model)
+void ParticleSystem::update(float deltaTime)
 {
 	computeShader->use();
 
@@ -122,6 +125,7 @@ void ParticleSystem::update(float deltaTime, glm::mat4& model)
 void ParticleSystem::draw(glm::mat4& view, glm::mat4& projection)
 {
 	glEnable(GL_BLEND);
+	glDisable(GL_CULL_FACE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	particleShader->use();
@@ -137,5 +141,6 @@ void ParticleSystem::draw(glm::mat4& view, glm::mat4& projection)
 	glUseProgram(0);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 }

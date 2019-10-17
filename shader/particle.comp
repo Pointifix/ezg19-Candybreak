@@ -47,6 +47,7 @@ void main(void)
 
 	vec3 velocity = Velocity_In[idx].xyz;
 	vec3 pos = Position_In[idx].xyz + deltaTime * velocity;
+	velocity *= 0.9999;
 	float TTL = Position_In[idx].w - deltaTime;
 
 	if (TTL > 0) 

@@ -61,7 +61,17 @@ int init()
 
 	// glfw window creation
 	// --------------------
-	window = glfwCreateWindow(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, "Candybreak", NULL, NULL);
+	if (setting::FULLSCREEN)
+	{
+		GLFWmonitor* primary = glfwGetPrimaryMonitor();
+		glfwSetGamma(primary, setting::BRIGHTNESS);
+		window = glfwCreateWindow(1980, 1080, setting::TITLE.c_str(), primary, nullptr);
+	}
+	else
+	{
+		window = glfwCreateWindow(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, setting::TITLE.c_str(), nullptr, nullptr);
+	}
+
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;

@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Breakout.h" />
+    <ClInclude Include="Forcefield.h" />
     <ClInclude Include="FreeCamera.h" />
     <ClInclude Include="Init.h" />
     <ClInclude Include="InputHandler.h" />
@@ -171,6 +172,7 @@
   <ItemGroup>
     <ClCompile Include="Breakout.cpp" />
     <ClCompile Include="Candybreak.cpp" />
+    <ClCompile Include="Forcefield.cpp" />
     <ClCompile Include="FreeCamera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Init.cpp" />
@@ -182,6 +184,8 @@
     <ClCompile Include="Skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\shader\forcefield.frag" />
+    <None Include="..\shader\forcefield.vert" />
     <None Include="..\shader\particle.comp" />
     <None Include="..\shader\particle.frag" />
     <None Include="..\shader\particle.geom" />

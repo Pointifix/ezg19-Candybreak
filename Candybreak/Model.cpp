@@ -1,8 +1,8 @@
 #include "Model.h"
 
-unsigned int TextureFromFile(const char *path, const string &directory, bool gamma = false);
+unsigned int TextureFromFile(const char *path, const string &directory);
 
-Model::Model(string const &path, bool gamma) : gammaCorrection(gamma)
+Model::Model(string const &path, glm::vec3 position, glm::vec3 rotationAxes, float rotation) : Position(position), RotationAxes(rotationAxes), Rotation(rotation)
 {
 	loadModel(path);
 }
@@ -14,6 +14,11 @@ Model::~Model()
 
 void Model::Draw(Shader shader)
 {
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, this->Position);
+	model = glm::rotate(model, glm::radians(this->Rotation), this->RotationAxes);
+	shader.setMat4("model", model);
+
 	for (unsigned int i = 0; i < meshes.size(); i++)
 		meshes[i].Draw(shader);
 }
@@ -155,7 +160,7 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 	return textures;
 }
 
-unsigned int TextureFromFile(const char *path, const string &directory, bool gamma)
+unsigned int TextureFromFile(const char *path, const string &directory)
 {
 	string filename = string(path);
 	filename = directory + '/' + filename;

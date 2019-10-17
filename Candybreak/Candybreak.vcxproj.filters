@@ -42,6 +42,9 @@
     <ClInclude Include="ParticleSystem.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="Forcefield.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Candybreak.cpp">
@@ -77,6 +80,9 @@
     <ClCompile Include="ParticleSystem.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Forcefield.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\shader\simple.frag">
@@ -101,6 +107,12 @@
       <Filter>Ressourcendateien</Filter>
     </None>
     <None Include="..\shader\particle.frag">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\forcefield.frag">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\forcefield.vert">
       <Filter>Ressourcendateien</Filter>
     </None>
   </ItemGroup>

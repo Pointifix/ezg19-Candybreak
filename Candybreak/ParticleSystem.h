@@ -8,7 +8,7 @@ public:
 	ParticleSystem(glm::vec3 position, int particleCount);
 	~ParticleSystem();
 
-	void update(float deltaTime, glm::mat4& model);
+	void update(float deltaTime);
 	void draw(glm::mat4& view, glm::mat4& projection);
 private:
 	std::unique_ptr<Shader> particleShader;
@@ -23,7 +23,7 @@ private:
 	GLuint atomic_counter;
 	GLuint temp_buffer;
 
-	const unsigned int MAX_PARTICLES = 1024;
+	const unsigned int MAX_PARTICLES = 2048;
 
 	unsigned int particle_count;
 	unsigned int current_particle_count;

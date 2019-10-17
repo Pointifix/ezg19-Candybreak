@@ -27,9 +27,11 @@ public:
 	vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
 	vector<Mesh> meshes;
 	string directory;
-	bool gammaCorrection;
 
-	Model(string const &path, bool gamma = false);
+	glm::vec3 Position, RotationAxes;
+	float Rotation;
+
+	Model(string const &path, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 rotationAxes = glm::vec3(0.0f, 1.0f, 0.0f), float rotation = 0.0f);
 	~Model();
 
 	void Draw(Shader shader);

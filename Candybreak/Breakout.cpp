@@ -24,12 +24,16 @@ void Breakout::boundaryCheck()
 {
 	for (int i = 0; i < BOUNDARIES.size(); i++)
 	{
-		float distanceToBoundary = glm::dot(glm::vec3(BOUNDARIES[i]), this->Position) + BOUNDARIES[i].w;
+		float distanceToBoundary = glm::dot(glm::vec3(BOUNDARIES[i]), this->Position) + BOUNDARIES[i].w - (BALL_SIZE / 2.0f);
 
-		if (distanceToBoundary < 0) {
+		if (distanceToBoundary < 0 && glm::dot(this->Direction, glm::vec3(BOUNDARIES[i])) < 0) {
 			this->Direction = glm::reflect(this->Direction, glm::vec3(BOUNDARIES[i]));
-		}
 
-		//TODO CHECK DOT PRODUCT TO AVOID DOUBLE REFLECTS
+			if (i == 0) this->hits[i * 4] = glm::vec3((this->Position.x + BOX_SIZE / 2) / BOX_SIZE, (this->Position.y + BOX_SIZE / 2) / BOX_SIZE, currentFrame);
+			if (i == 1) this->hits[i * 4] = glm::vec3((-this->Position.z + BOX_SIZE / 2) / BOX_SIZE, (-this->Position.y + BOX_SIZE / 2) / BOX_SIZE, currentFrame);
+			if (i == 2) this->hits[i * 4] = glm::vec3((-this->Position.x + BOX_SIZE / 2) / BOX_SIZE, (this->Position.y + BOX_SIZE / 2) / BOX_SIZE, currentFrame);
+			if (i == 3) this->hits[i * 4] = glm::vec3((this->Position.z + BOX_SIZE / 2) / BOX_SIZE, (-this->Position.y + BOX_SIZE / 2) / BOX_SIZE, currentFrame);
+			if (i == 4) this->hits[i * 4] = glm::vec3((this->Position.x + BOX_SIZE / 2) / BOX_SIZE, (-this->Position.z + BOX_SIZE / 2) / BOX_SIZE, currentFrame);
+		}
 	}
 }
