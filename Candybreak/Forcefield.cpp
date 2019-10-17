@@ -37,11 +37,32 @@ void Forcefield::drawForcefield(glm::mat4& view, glm::mat4& projection)
 		forcefieldModel->Position = this->positions[i];
 		forcefieldModel->Rotation = this->rotations[i];
 
-		forcefieldShader->setVec2("hitCoords[0]", glm::vec2(breakout.hits[i * 4].x, breakout.hits[i * 4].y));
-		forcefieldShader->setInt("hitCount", 1);
-		forcefieldShader->setFloat("time", currentFrame - breakout.hits[i * 4].z);
+		auto* hitQueue = &breakout.hitQueues[i];
+
+		int size = hitQueue->size();
+		if (size > 4) size = 4;
+
+		forcefieldShader->setInt("hitCount", 0);
+		if (size > 0) {
+
+			if (currentFrame - hitQueue->front().z > 3.0f)
+			{
+				hitQueue->pop();
+				size--;				
+			}
+
+			forcefieldShader->setInt("hitCount", size);
+			int j = 0;
+
+			for (auto it = hitQueue->begin(); j < 4 && it != hitQueue->end(); ++it)
+			{
+				forcefieldShader->setVec3("hitCoords[" + std::to_string(j) + "]", glm::vec3(it->x, it->y, currentFrame - it->z));
+				j++;
+			}
+		}
 
 		forcefieldModel->Draw(*forcefieldShader);
 	}
+
 	glEnable(GL_CULL_FACE);
 }

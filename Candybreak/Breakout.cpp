@@ -29,11 +29,11 @@ void Breakout::boundaryCheck()
 		if (distanceToBoundary < 0 && glm::dot(this->Direction, glm::vec3(BOUNDARIES[i])) < 0) {
 			this->Direction = glm::reflect(this->Direction, glm::vec3(BOUNDARIES[i]));
 
-			if (i == 0) this->hits[i * 4] = glm::vec3((this->Position.x + BOX_SIZE / 2) / BOX_SIZE, (this->Position.y + BOX_SIZE / 2) / BOX_SIZE, currentFrame);
-			if (i == 1) this->hits[i * 4] = glm::vec3((-this->Position.z + BOX_SIZE / 2) / BOX_SIZE, (-this->Position.y + BOX_SIZE / 2) / BOX_SIZE, currentFrame);
-			if (i == 2) this->hits[i * 4] = glm::vec3((-this->Position.x + BOX_SIZE / 2) / BOX_SIZE, (this->Position.y + BOX_SIZE / 2) / BOX_SIZE, currentFrame);
-			if (i == 3) this->hits[i * 4] = glm::vec3((this->Position.z + BOX_SIZE / 2) / BOX_SIZE, (-this->Position.y + BOX_SIZE / 2) / BOX_SIZE, currentFrame);
-			if (i == 4) this->hits[i * 4] = glm::vec3((this->Position.x + BOX_SIZE / 2) / BOX_SIZE, (-this->Position.z + BOX_SIZE / 2) / BOX_SIZE, currentFrame);
+			if (i == 0) this->hitQueues[i].push(glm::vec3((this->Position.x + BOX_SIZE / 2) / BOX_SIZE, (-this->Position.y + BOX_SIZE / 2) / BOX_SIZE, currentFrame));
+			if (i == 1) this->hitQueues[i].push(glm::vec3((-this->Position.z + BOX_SIZE / 2) / BOX_SIZE, (-this->Position.y + BOX_SIZE / 2) / BOX_SIZE, currentFrame));
+			if (i == 2) this->hitQueues[i].push(glm::vec3((-this->Position.x + BOX_SIZE / 2) / BOX_SIZE, (-this->Position.y + BOX_SIZE / 2) / BOX_SIZE, currentFrame));
+			if (i == 3) this->hitQueues[i].push(glm::vec3((this->Position.z + BOX_SIZE / 2) / BOX_SIZE, (-this->Position.y + BOX_SIZE / 2) / BOX_SIZE, currentFrame));
+			if (i == 4) this->hitQueues[i].push(glm::vec3((this->Position.x + BOX_SIZE / 2) / BOX_SIZE, (-this->Position.z + BOX_SIZE / 2) / BOX_SIZE, currentFrame));			
 		}
 	}
 }

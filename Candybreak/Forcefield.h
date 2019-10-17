@@ -5,9 +5,12 @@
 #include "FreeCamera.h"
 #include "Breakout.h"
 
+#include <queue>
+
 extern const float BOX_SIZE;
 extern FreeCamera camera;
 extern Breakout breakout;
+extern float currentFrame;
 
 class Forcefield
 {
