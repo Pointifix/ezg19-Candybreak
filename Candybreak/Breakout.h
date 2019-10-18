@@ -7,9 +7,14 @@
 #include <queue>
 #include <array>
 
+#include "ParticleSystem.h"
+
 const float BOX_SIZE = 50.0f;
 const float BALL_SIZE = 2.0f; //diameter not radius!
-const float BALL_SPEED = 64.0f;
+const float PAD_SIZE = 6.0f; //diameter not radius!
+const float BORDER = 1.0f; //border (black bits)
+const float BALL_SPEED = 32.0f;
+const float PAD_SPEED = 32.0f;
 
 extern float currentFrame;
 
@@ -21,6 +26,8 @@ const std::array<glm::vec4, 6> BOUNDARIES = {
 	glm::vec4(0.0, -1.0, 0.0, BOX_SIZE / 2.0), //top
 	glm::vec4(0.0, 1.0, 0.0, BOX_SIZE / 2.0) //bottom
 };
+
+extern std::vector<std::unique_ptr<ParticleSystem>> particleSystems;
 
 template<typename T, typename Container = std::deque<T> >
 class iterable_queue : public std::queue<T, Container>
@@ -38,12 +45,14 @@ public:
 class Breakout
 {
 public:
-	glm::vec3 Position;
+	glm::vec3 ballPosition;
 	glm::vec3 Direction;
+
+	glm::vec3 padPosition;
 
 	iterable_queue<glm::vec3> hitQueues[5];
 
-	Breakout(glm::vec3 position, glm::vec3 direction);
+	Breakout(glm::vec3 positionBall = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 direction = glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3 positionPad = glm::vec3(0.0f, -BOX_SIZE / 2, 0.0f));
 	~Breakout();
 
 	void update(float deltaTime);

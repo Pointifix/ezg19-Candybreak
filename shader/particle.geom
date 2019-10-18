@@ -5,6 +5,7 @@ layout (triangle_strip, max_vertices = 4) out;
 
 uniform mat4 V;
 uniform mat4 VP;
+uniform vec3 systemColor;
 
 out vec4 color;
 
@@ -19,19 +20,19 @@ void main() {
     vec3 P = gl_in[0].gl_Position.xyz;
 
 	gl_Position = VP * vec4(P - (right + up) * size, 1.0);
-	color = vec4(1, 0, 0, TTL / 5);
+	color = vec4(systemColor, TTL / 5);
 	EmitVertex();
 	
 	gl_Position = VP * vec4(P + (right - up) * size, 1.0);
-	color = vec4(1, 0, 0, TTL / 5);
+	color = vec4(systemColor, TTL / 5);
 	EmitVertex();
 
 	gl_Position = VP * vec4(P - (right - up) * size, 1.0);
-	color = vec4(1, 0, 0, TTL / 5);
+	color = vec4(systemColor, TTL / 5);
 	EmitVertex();
 
 	gl_Position = VP * vec4(P + (right + up) * size, 1.0);
-	color = vec4(1, 0, 0, TTL / 5);
+	color = vec4(systemColor, TTL / 5);
 	EmitVertex();
 	
 	EndPrimitive();  

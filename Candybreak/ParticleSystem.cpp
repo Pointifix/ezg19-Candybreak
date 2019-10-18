@@ -124,9 +124,7 @@ void ParticleSystem::update(float deltaTime)
 
 void ParticleSystem::draw(glm::mat4& view, glm::mat4& projection)
 {
-	glEnable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	particleShader->use();
 
@@ -135,12 +133,10 @@ void ParticleSystem::draw(glm::mat4& view, glm::mat4& projection)
 	particleShader->setVec3("CameraRight_worldspace", view[0][0], view[1][0], view[2][0]);
 	particleShader->setVec3("CameraUp_worldspace", view[0][1], view[1][1], view[2][1]);
 
+	particleShader->setVec3("systemColor", glm::vec3(1.0f, 1.0f, 1.0f));
+
 	glBindVertexArray(vaos[currentSSBO]);
 	glDrawArrays(GL_POINTS, 0, current_particle_count);
 	glBindVertexArray(0);
 	glUseProgram(0);
-
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_BLEND);
 }

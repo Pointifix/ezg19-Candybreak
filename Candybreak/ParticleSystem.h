@@ -8,6 +8,8 @@ public:
 	ParticleSystem(glm::vec3 position, int particleCount);
 	~ParticleSystem();
 
+	unsigned int current_particle_count;
+
 	void update(float deltaTime);
 	void draw(glm::mat4& view, glm::mat4& projection);
 private:
@@ -26,6 +28,5 @@ private:
 	const unsigned int MAX_PARTICLES = 2048;
 
 	unsigned int particle_count;
-	unsigned int current_particle_count;
 };
 
