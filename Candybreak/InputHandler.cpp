@@ -9,6 +9,9 @@ extern float deltaTime;
 bool firstMouse = true;
 float lastX, lastY;
 
+extern glm::vec2 screenSize;
+extern bool paused;
+
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
@@ -23,6 +26,14 @@ void processInput(GLFWwindow *window)
 		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
+}
+
+// glfw: whenever a key is pressed
+// -------------------------------
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_PAUSE && action == GLFW_PRESS)
+		paused = !paused;
 }
 
 // glfw: whenever the mouse moves, this callback is called
@@ -52,4 +63,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	// make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
+
+	screenSize = glm::vec2(width, height);
 }

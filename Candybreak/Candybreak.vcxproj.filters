@@ -45,6 +45,15 @@
     <ClInclude Include="Forcefield.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="Bricks.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Void.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="BrickPositions.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Candybreak.cpp">
@@ -83,6 +92,12 @@
     <ClCompile Include="Forcefield.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Bricks.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Void.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\shader\simple.frag">
@@ -113,6 +128,12 @@
       <Filter>Ressourcendateien</Filter>
     </None>
     <None Include="..\shader\forcefield.vert">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\void.frag">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\void.vert">
       <Filter>Ressourcendateien</Filter>
     </None>
   </ItemGroup>

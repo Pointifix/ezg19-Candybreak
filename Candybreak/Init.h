@@ -1,4 +1,5 @@
 #pragma once
+
 namespace setting
 {
 	extern unsigned int SCREEN_WIDTH;

@@ -1,6 +1,8 @@
 #version 460 core
 out vec4 FragColor;
 
+flat in int instanceID;
+
 struct Material {
     sampler2D diffuse;
     sampler2D specular;
@@ -23,11 +25,10 @@ uniform vec3 viewPos;
 uniform DirLight dirLight;
 uniform Material material;
 
-// function prototypes
 vec4 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 
 void main()
-{    
+{
     // properties
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
@@ -35,6 +36,10 @@ void main()
     // phase 1: directional lighting
     vec4 result = CalcDirLight(dirLight, norm, viewDir);
     
+	//if(instanceID % 3 == 0) result = result.rgba;
+	//if(instanceID % 3 == 1) result = result.brga;
+	//if(instanceID % 3 == 2) result = result.gbra;
+
     FragColor = result;
 }
 

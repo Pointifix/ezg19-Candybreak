@@ -1,9 +1,10 @@
 #pragma once
 #include "ParticleSystem.h"
 
-ParticleSystem::ParticleSystem(glm::vec3 position, int particleCount)
+ParticleSystem::ParticleSystem(glm::vec3 position, int particleCount, glm::vec3 color)
 {
 	this->particle_count = particleCount;
+	this->color = color;
 
 	particleShader = std::make_unique<Shader>("../shader/particle.vert", "../shader/particle.frag", "../shader/particle.geom");
 	computeShader = std::make_unique<Shader>(nullptr, nullptr, nullptr, "../shader/particle.comp");
@@ -133,7 +134,7 @@ void ParticleSystem::draw(glm::mat4& view, glm::mat4& projection)
 	particleShader->setVec3("CameraRight_worldspace", view[0][0], view[1][0], view[2][0]);
 	particleShader->setVec3("CameraUp_worldspace", view[0][1], view[1][1], view[2][1]);
 
-	particleShader->setVec3("systemColor", glm::vec3(1.0f, 1.0f, 1.0f));
+	particleShader->setVec3("systemColor", color);
 
 	glBindVertexArray(vaos[currentSSBO]);
 	glDrawArrays(GL_POINTS, 0, current_particle_count);

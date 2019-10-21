@@ -9,6 +9,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include <SettingsReader.h>
 #include <irrKlang/irrKlang.h>
 #include "InputHandler.h"
@@ -17,6 +18,8 @@ using namespace irrklang;
 
 GLFWwindow* window;
 ISoundEngine *SoundEngine;
+
+glm::vec2 screenSize;
 
 namespace setting
 {
@@ -66,10 +69,12 @@ int init()
 		GLFWmonitor* primary = glfwGetPrimaryMonitor();
 		glfwSetGamma(primary, setting::BRIGHTNESS);
 		window = glfwCreateWindow(1980, 1080, setting::TITLE.c_str(), primary, nullptr);
+		screenSize = glm::vec2(1980, 1080);
 	}
 	else
 	{
 		window = glfwCreateWindow(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, setting::TITLE.c_str(), nullptr, nullptr);
+		screenSize = glm::vec2(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT);
 	}
 
 	if (window == NULL)
@@ -80,6 +85,7 @@ int init()
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetKeyCallback(window, key_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 
 	// glad: load all OpenGL function pointers

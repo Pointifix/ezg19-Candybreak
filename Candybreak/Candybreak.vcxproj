@@ -159,6 +159,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Breakout.h" />
+    <ClInclude Include="BrickPositions.h" />
+    <ClInclude Include="Bricks.h" />
     <ClInclude Include="Forcefield.h" />
     <ClInclude Include="FreeCamera.h" />
     <ClInclude Include="Init.h" />
@@ -168,9 +170,11 @@
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="Void.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Breakout.cpp" />
+    <ClCompile Include="Bricks.cpp" />
     <ClCompile Include="Candybreak.cpp" />
     <ClCompile Include="Forcefield.cpp" />
     <ClCompile Include="FreeCamera.cpp" />
@@ -182,6 +186,7 @@
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="Void.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\shader\forcefield.frag" />
@@ -194,6 +199,8 @@
     <None Include="..\shader\simple.vert" />
     <None Include="..\shader\skybox.frag" />
     <None Include="..\shader\skybox.vert" />
+    <None Include="..\shader\void.frag" />
+    <None Include="..\shader\void.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

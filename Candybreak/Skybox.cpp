@@ -11,6 +11,8 @@ GLuint skyboxVBO;
 GLuint texture1ID;
 GLuint texture2ID;
 
+std::unique_ptr<Shader> skyboxShader;
+
 float skyboxVertices[] = {
 	-1.0f,  1.0f, -1.0f,
 	-1.0f, -1.0f, -1.0f,
@@ -55,9 +57,9 @@ float skyboxVertices[] = {
 	1.0f, -1.0f,  1.0f
 };
 
-Shader initSkybox()
+void initSkybox()
 {
-	Shader shader("../shader/skybox.vert", "../shader/skybox.frag");
+	skyboxShader = std::make_unique<Shader>("../shader/skybox.vert", "../shader/skybox.frag");
 
 	glGenVertexArrays(1, &skyboxVAO);
 	glGenBuffers(1, &skyboxVBO);
@@ -140,28 +142,27 @@ Shader initSkybox()
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-	shader.use();
-	shader.setInt("skybox1", glGetUniformLocation(shader.ID, "skybox1"));
-	shader.setInt("skybox2", glGetUniformLocation(shader.ID, "skybox2"));
-	return shader;
+	skyboxShader->use();
+	skyboxShader->setInt("skybox1", glGetUniformLocation(skyboxShader->ID, "skybox1"));
+	skyboxShader->setInt("skybox2", glGetUniformLocation(skyboxShader->ID, "skybox2"));
 }
 
-void drawSkybox(glm::mat4 view, glm::mat4 projection, Shader shader, float t)
+void drawSkybox(glm::mat4 view, glm::mat4 projection, float t)
 {
 	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-	shader.use();
+	skyboxShader->use();
 	glm::mat4 viewModified = glm::mat4(glm::mat3(glm::rotate(view, glm::radians(t * 90.0f), glm::vec3(1.0f, 0.0f, 0.0f))));
-	shader.setMat4("view", viewModified);
-	shader.setMat4("projection", projection);
-	shader.setFloat("t", t);
+	skyboxShader->setMat4("view", viewModified);
+	skyboxShader->setMat4("projection", projection);
+	skyboxShader->setFloat("t", t);
 	// skybox cube
 	glBindVertexArray(skyboxVAO);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, texture1ID);
-	glUniform1i(glGetUniformLocation(shader.ID, "skybox1"), 0);
+	glUniform1i(glGetUniformLocation(skyboxShader->ID, "skybox1"), 0);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, texture2ID);
-	glUniform1i(glGetUniformLocation(shader.ID, "skybox2"), 1);
+	glUniform1i(glGetUniformLocation(skyboxShader->ID, "skybox2"), 1);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 	glDepthFunc(GL_LESS); // set depth function back to default

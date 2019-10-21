@@ -5,8 +5,10 @@
 class ParticleSystem
 {
 public:
-	ParticleSystem(glm::vec3 position, int particleCount);
+	ParticleSystem(glm::vec3 position, int particleCount, glm::vec3 color);
 	~ParticleSystem();
+
+	glm::vec3 color;
 
 	unsigned int current_particle_count;
 
@@ -25,7 +27,7 @@ private:
 	GLuint atomic_counter;
 	GLuint temp_buffer;
 
-	const unsigned int MAX_PARTICLES = 2048;
+	const unsigned int MAX_PARTICLES = 32768;
 
 	unsigned int particle_count;
 };
