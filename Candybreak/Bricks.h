@@ -13,7 +13,7 @@ public:
 	Bricks();
 	~Bricks();
 
-	void drawInstanced(Shader shader);
+	void draw(Shader shader);
 private:
 	std::unique_ptr<Model> brickModel;
 };

@@ -132,7 +132,7 @@ void Breakout::bricksCheck()
 			glm::vec3 closestPointToBall = glm::max(boxMin, glm::min(ballPosition, boxMax));
 			glm::vec3 difference = closestPointToBall - ballPosition;
 
-			this->ballPosition += difference * (glm::length(difference) - (BALL_SIZE / 2.0f));
+			this->ballPosition += difference * ((BALL_SIZE / 2.0f) - glm::length(difference));
 
 			this->Direction = glm::reflect(this->Direction, difference);
 			this->Direction = glm::normalize(this->Direction);

@@ -26,7 +26,7 @@ Bricks::~Bricks()
 
 }
 
-void Bricks::drawInstanced(Shader shader) {
+void Bricks::draw(Shader shader) {
 	glm::mat4 model = glm::mat4(1.0f);
 	shader.setMat4("model", model);
 
