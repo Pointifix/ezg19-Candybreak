@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Quelldateien">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Headerdateien">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Ressourcendateien">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Quelldateien\Logic">
+      <UniqueIdentifier>{888a7810-7448-4d4f-96f4-af6b59d13e64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Render">
+      <UniqueIdentifier>{4dee9fea-15ec-471a-9f23-b48a0054102e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Render">
+      <UniqueIdentifier>{24ead512-2897-46ae-a9b6-1b0c4f136642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Logic">
+      <UniqueIdentifier>{240eb681-8e21-46f1-84a7-84f5d57a61e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Render\Camera">
+      <UniqueIdentifier>{4d47769e-b351-44b7-8682-4552fab0f28e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Render\Camera">
+      <UniqueIdentifier>{8de6c083-e029-412b-9fef-30ebfdc76507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Render\Shader">
+      <UniqueIdentifier>{d9808e92-2592-449b-a258-c5c8ea5155b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Render\Shader">
+      <UniqueIdentifier>{099e045f-fc2d-4e28-b078-628543138dc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Render\Light">
+      <UniqueIdentifier>{833cb477-4a51-4eb0-86ec-9c94d04a9688}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Render\Light">
+      <UniqueIdentifier>{74bd6c42-fcd6-46b4-8d1a-4896582ed8a8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RenderEngine.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicEngine.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHandler.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Headerdateien\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Headerdateien\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Headerdateien\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeCamera.h">
+      <Filter>Headerdateien\Render\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Headerdateien\Render\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Headerdateien\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="VolumentricLightShader.h">
+      <Filter>Headerdateien\Render\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>Headerdateien\Render\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="PhongShader.h">
+      <Filter>Headerdateien\Render\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthShader.h">
+      <Filter>Headerdateien\Render\Shader</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TestProject.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderEngine.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicEngine.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandler.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Globals.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Quelldateien\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Quelldateien\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Quelldateien\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeCamera.cpp">
+      <Filter>Quelldateien\Render\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Quelldateien\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="VolumentricLightShader.cpp">
+      <Filter>Quelldateien\Render\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>Quelldateien\Render\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="PhongShader.cpp">
+      <Filter>Quelldateien\Render\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthShader.cpp">
+      <Filter>Quelldateien\Render\Shader</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\shader\skybox.frag">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\skybox.vert">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\volumetriclight.frag">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\volumetriclight.vert">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\phong.vert">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\phong.frag">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\depth.frag">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\depth.vert">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+  </ItemGroup>
+</Project>
