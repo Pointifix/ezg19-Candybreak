@@ -64,9 +64,11 @@ void RenderEngine::update()
 	global::t = 1.0f - ((float)(global::candylandSong->getPlayLength() - global::candylandSong->getPlayPosition()) / global::candylandSong->getPlayLength());
 
 	//update light position
+	/*
 	global::directionalLight->direction = glm::rotateX(glm::vec3(0.5f, -0.5f, -0.5f), glm::radians(-360.0f * global::t));
 	global::directionalLight->position = global::directionalLight->direction * (-500.0f);
 	global::directionalLight->view = glm::lookAt(global::directionalLight->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	*/
 
 	processInput();
 }
@@ -74,6 +76,7 @@ void RenderEngine::update()
 void RenderEngine::render()
 {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glCullFace(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 view = global::camera->getViewMatrix();
@@ -81,10 +84,12 @@ void RenderEngine::render()
 
 	depthShader->use(global::directionalLight->view, global::directionalLight->projection);
 	depthShader->draw(*modelManager->map);
+	depthShader->draw(*modelManager->tree);
 	depthShader->finish();
 
 	phongShader->use(view, projection, depthShader->depthmap);
-	phongShader->draw(*modelManager->map);
+	//phongShader->draw(*modelManager->map);
+	phongShader->draw(*modelManager->tree);
 
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, phongShader->FBO);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);

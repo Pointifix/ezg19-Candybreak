@@ -8,5 +8,6 @@ public:
 	~ModelManager();
 
 	std::unique_ptr<Model>map;
+	std::unique_ptr<Model>tree;
 };
 
