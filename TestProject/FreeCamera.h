@@ -41,15 +41,22 @@ public:
 	float mouseSensitivity;
 	float rollSensitivity;
 
+	int debugCount; 
+
 	FreeCamera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH, float roll = ROLL);
 	~FreeCamera();
 
 	glm::mat4 getViewMatrix();
 
 	void processInput();
-
+	void getPositionCamera();
 	void processKeyboard(FreeCameraMovement direction, float deltaTime);
 	void processMouseMovement(float xoffset, float yoffset);
+	void yawAutoChange(float angle);
+	void pitchAutoChange(float angle);
+	float getPitch();
+	float getYaw();
+	void calcNewRotation(float xoffset, float yoffset);
 private:
 	void yawChange(float angle);
 	void pitchChange(float angle);

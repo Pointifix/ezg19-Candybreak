@@ -14,6 +14,8 @@ FreeCamera::FreeCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch,
 	yawChange(yaw);
 	pitchChange(pitch);
 	rollChange(roll);
+
+	debugCount = 0;
 }
 
 FreeCamera::~FreeCamera()
@@ -40,10 +42,14 @@ void FreeCamera::processInput()
 		processKeyboard(ROLLLEFT, global::deltaTime);
 	if (glfwGetKey(global::window, GLFW_KEY_E) == GLFW_PRESS)
 		processKeyboard(ROLLRIGHT, global::deltaTime);
+	if (glfwGetKey(global::window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		getPositionCamera();
+
 }
 
 void FreeCamera::processKeyboard(FreeCameraMovement direction, float deltaTime)
 {
+	debugCount = 0;
 	float velocity = movementSpeed * deltaTime;
 	if (direction == FORWARD)
 		position += front * velocity;
@@ -58,6 +64,8 @@ void FreeCamera::processKeyboard(FreeCameraMovement direction, float deltaTime)
 		rollChange(rollSensitivity * -deltaTime);
 	if (direction == ROLLRIGHT)
 		rollChange(rollSensitivity  * deltaTime);
+
+
 }
 
 void FreeCamera::processMouseMovement(float xoffset, float yoffset)
@@ -71,11 +79,18 @@ void FreeCamera::processMouseMovement(float xoffset, float yoffset)
 
 void FreeCamera::yawChange(float angle)
 {
+
 	this->yaw += angle;
+
+
+	//std::cout << "YAW: " << this->yaw << " ROLL: " << front.y << " PITCH: " << this->pitch << std::endl;
 
 	front = glm::rotateY(front, glm::radians(angle));
 	up = glm::rotateY(up, glm::radians(angle));
 	right = glm::rotateY(right, glm::radians(angle));
+
+	//std::cout << "FRONT: " << front.x << " ROLL: " << front.y << " PITCH: " << front.z << std::endl;
+
 }
 
 void FreeCamera::pitchChange(float angle)
@@ -92,4 +107,58 @@ void FreeCamera::rollChange(float angle)
 
 	right = glm::rotate(right, glm::radians(angle), front);
 	up = glm::rotate(up, glm::radians(angle), front);
+}
+
+
+void FreeCamera::getPositionCamera() {
+
+	if (debugCount < 1) {
+		std::cout << "Position: " << global::camera->position.x << " " << global::camera->position.y << " " << global::camera->position.z << std::endl;
+		std::cout << "YAW: " << yaw << " ROLL: " << roll << " PITCH: " << pitch << std::endl;
+		std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: " << std::endl;
+		debugCount = 1;
+	}
+}
+
+void FreeCamera::calcNewRotation(float xoffset, float yoffset) {
+
+
+		//xoffset *= mouseSensitivity;
+	//	yoffset *= mouseSensitivity;
+
+
+
+		//std::cout << "YAW: " << glm::radians(yaw) << " Offset: " << glm::radians(xoffset) << std::endl;
+
+		yawAutoChange(-xoffset);
+		pitchAutoChange(yoffset);
+	
+}
+
+void FreeCamera::yawAutoChange(float angle) {
+
+
+	this->yaw += angle;
+
+	front = glm::rotateY(front, glm::radians(angle));
+	up = glm::rotateY(up, glm::radians(angle));
+	right = glm::rotateY(right, glm::radians(angle));
+
+}
+
+
+void FreeCamera::pitchAutoChange(float angle) {
+
+	this->pitch += angle;
+
+	front = glm::rotate(front, glm::radians(angle), right);
+	up = glm::rotate(up, glm::radians(angle), right);
+}
+
+float FreeCamera::getPitch() {
+	return pitch;
+}
+
+float FreeCamera::getYaw() {
+	return yaw;
 }

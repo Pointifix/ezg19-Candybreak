@@ -19,12 +19,15 @@
 #include "DepthShader.h"
 #include "Skybox.h"
 #include "ModelManager.h"
+#include "MovementCamera.h"
 
 std::unique_ptr<VolumetricLightShader> volumetricLightShader;
 std::unique_ptr<PhongShader> phongShader;
 std::unique_ptr<DepthShader> depthShader;
 
 std::unique_ptr<ModelManager> modelManager;
+
+MovementCamera mvcam;
 
 RenderEngine::RenderEngine()
 {
@@ -63,6 +66,12 @@ void RenderEngine::update()
 
 	global::t = 1.0f - ((float)(global::candylandSong->getPlayLength() - global::candylandSong->getPlayPosition()) / global::candylandSong->getPlayLength());
 
+
+
+
+
+
+
 	//update light position
 	/*
 	global::directionalLight->direction = glm::rotateX(glm::vec3(0.5f, -0.5f, -0.5f), glm::radians(-360.0f * global::t));
@@ -81,6 +90,11 @@ void RenderEngine::render()
 
 	glm::mat4 view = global::camera->getViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)setting::SCREEN_WIDTH / (float)setting::SCREEN_HEIGHT, 0.1f, 500.0f);
+
+
+
+	mvcam.startAutoCamera();
+
 
 	depthShader->use(global::directionalLight->view, global::directionalLight->projection);
 	depthShader->draw(*modelManager->map);
@@ -111,6 +125,10 @@ void RenderEngine::render()
 int RenderEngine::init()
 {
 	global::camera = new FreeCamera(glm::vec3(0.0f, 0.0f, 100.0f));
+
+
+	mvcam = MovementCamera();
+	mvcam.init();
 
 	// glfw: initialize and configure
 	glfwInit();
