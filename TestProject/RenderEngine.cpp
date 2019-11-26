@@ -13,21 +13,19 @@
 #include "Globals.h"
 #include "Camera.h"
 #include "FreeCamera.h"
+#include "AutomaticCamera.h"
 #include "InputHandler.h"
 #include "VolumentricLightShader.h"
 #include "PhongShader.h"
 #include "DepthShader.h"
 #include "Skybox.h"
 #include "ModelManager.h"
-#include "MovementCamera.h"
 
 std::unique_ptr<VolumetricLightShader> volumetricLightShader;
 std::unique_ptr<PhongShader> phongShader;
 std::unique_ptr<DepthShader> depthShader;
 
 std::unique_ptr<ModelManager> modelManager;
-
-MovementCamera mvcam;
 
 RenderEngine::RenderEngine()
 {
@@ -65,21 +63,11 @@ void RenderEngine::update()
 	lastFrame = currentFrame;
 
 	global::t = 1.0f - ((float)(global::candylandSong->getPlayLength() - global::candylandSong->getPlayPosition()) / global::candylandSong->getPlayLength());
-
-
-
-
-
-
-
-	//update light position
-	/*
-	global::directionalLight->direction = glm::rotateX(glm::vec3(0.5f, -0.5f, -0.5f), glm::radians(-360.0f * global::t));
-	global::directionalLight->position = global::directionalLight->direction * (-500.0f);
-	global::directionalLight->view = glm::lookAt(global::directionalLight->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	*/
+	if (global::t > 1.0) global::t = 1.0;
 
 	processInput();
+
+	global::camera->update();
 }
 
 void RenderEngine::render()
@@ -91,13 +79,8 @@ void RenderEngine::render()
 	glm::mat4 view = global::camera->getViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)setting::SCREEN_WIDTH / (float)setting::SCREEN_HEIGHT, 0.1f, 500.0f);
 
-
-
-	mvcam.startAutoCamera();
-
-
 	depthShader->use(global::directionalLight->view, global::directionalLight->projection);
-	depthShader->draw(*modelManager->map);
+	//depthShader->draw(*modelManager->map);
 	depthShader->draw(*modelManager->tree);
 	depthShader->finish();
 
@@ -124,11 +107,8 @@ void RenderEngine::render()
 
 int RenderEngine::init()
 {
-	global::camera = new FreeCamera(glm::vec3(0.0f, 0.0f, 100.0f));
-
-
-	mvcam = MovementCamera();
-	mvcam.init();
+	if (setting::CAMERA_MODE == "auto") global::camera = new AutomaticCamera();
+	if (global::camera == nullptr) global::camera = new FreeCamera(glm::vec3(0.0f, 0.0f, 100.0f));
 
 	// glfw: initialize and configure
 	glfwInit();

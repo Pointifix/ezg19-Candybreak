@@ -16,7 +16,13 @@ void processInput()
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	
+	if (glfwGetKey(global::window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	{
+		glm::vec3 position = global::camera->position;
+		glm::vec3 rotation = global::camera->rotation;
+
+		std::cout << "{ glm::vec3(" << position.x << "f, " << position.y << "f, " << position.z << "f), glm::vec3(" << rotation.x << "f, " << rotation.y << "f, " << rotation.z << "f), 0.0 }" << std::endl;
+	}
 }
 
 void mouseCallback(GLFWwindow* window, double xpos, double ypos)

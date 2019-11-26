@@ -30,5 +30,7 @@ namespace setting
 	extern bool CONSOLE;
 	extern bool MUSIC;
 
+	extern std::string CAMERA_MODE;
+
 	extern std::string TITLE;
 }

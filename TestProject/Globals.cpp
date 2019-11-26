@@ -24,5 +24,7 @@ namespace setting
 	bool CONSOLE;
 	bool MUSIC;
 
+	std::string CAMERA_MODE;
+
 	std::string TITLE;
 }

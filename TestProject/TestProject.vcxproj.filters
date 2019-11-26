@@ -90,11 +90,11 @@
     <ClInclude Include="DepthShader.h">
       <Filter>Headerdateien\Render\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="AutomaticCamera.h">
+      <Filter>Headerdateien\Render\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TestProject.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="RenderEngine.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -139,6 +139,15 @@
     </ClCompile>
     <ClCompile Include="DepthShader.cpp">
       <Filter>Quelldateien\Render\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Candybreak.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="AutomaticCamera.cpp">
+      <Filter>Quelldateien\Render\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Quelldateien\Render\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

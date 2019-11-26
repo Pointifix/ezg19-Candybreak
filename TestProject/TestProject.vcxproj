@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -168,6 +168,7 @@
     <ClInclude Include="FreeCamera.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="AutomaticCamera.h" />
     <ClInclude Include="PhongShader.h" />
     <ClInclude Include="LogicEngine.h" />
     <ClInclude Include="Mesh.h" />
@@ -179,12 +180,14 @@
     <ClInclude Include="VolumentricLightShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DepthShader.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="FreeCamera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="AutomaticCamera.cpp" />
     <ClCompile Include="PhongShader.cpp" />
     <ClCompile Include="LogicEngine.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -193,7 +196,7 @@
     <ClCompile Include="RenderEngine.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skybox.cpp" />
-    <ClCompile Include="TestProject.cpp" />
+    <ClCompile Include="Candybreak.cpp" />
     <ClCompile Include="VolumentricLightShader.cpp" />
   </ItemGroup>
   <ItemGroup>
