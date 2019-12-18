@@ -14,7 +14,7 @@ public:
 	glm::mat4 getViewMatrix();
 	virtual void update() = 0;
 	virtual void processInput() = 0;
-	virtual void processMouseMovement(float xoffset, float yoffset) = 0;
+	virtual void processMouseMovement(double xoffset, double yoffset) = 0;
 protected:
 	void changeYaw(float angle);
 	void changePitch(float angle);

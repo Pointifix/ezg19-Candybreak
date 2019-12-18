@@ -1,6 +1,4 @@
 #pragma once
-#include <glad/glad.h>
-
 #include "stb_image.h"
 #include "Mesh.h"
 #include "Skybox.h"
@@ -152,10 +150,10 @@ void drawSkybox(glm::mat4 view, glm::mat4 projection)
 {
 	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 	skyboxShader->use();
-	glm::mat4 viewModified = glm::mat4(glm::mat3(glm::rotate(view, glm::radians(global::t * 90.0f), glm::vec3(1.0f, 0.0f, 0.0f))));
+	glm::mat4 viewModified = glm::mat4(glm::mat3(glm::rotate(view, glm::radians((float)global::t * 90.0f), glm::vec3(1.0f, 0.0f, 0.0f))));
 	skyboxShader->setMat4("view", viewModified);
 	skyboxShader->setMat4("projection", projection);
-	skyboxShader->setFloat("t", global::t);
+	skyboxShader->setFloat("t", (float)global::t);
 	// skybox cube
 	glBindVertexArray(skyboxVAO);
 	glActiveTexture(GL_TEXTURE0);
@@ -167,5 +165,4 @@ void drawSkybox(glm::mat4 view, glm::mat4 projection)
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 	glDepthFunc(GL_LESS); // set depth function back to default
-
 }

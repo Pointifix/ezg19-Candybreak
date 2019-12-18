@@ -162,9 +162,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BlurShader.h" />
+    <ClInclude Include="Breakout.h" />
+    <ClInclude Include="Bricks.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CombineShader.h" />
     <ClInclude Include="DepthShader.h" />
     <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="FreeCamera.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="InputHandler.h" />
@@ -180,9 +185,14 @@
     <ClInclude Include="VolumentricLightShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BlurShader.cpp" />
+    <ClCompile Include="Breakout.cpp" />
+    <ClCompile Include="Bricks.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CombineShader.cpp" />
     <ClCompile Include="DepthShader.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="FreeCamera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Globals.cpp" />
@@ -200,6 +210,10 @@
     <ClCompile Include="VolumentricLightShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\shader\blur.frag" />
+    <None Include="..\shader\blur.vert" />
+    <None Include="..\shader\combine.frag" />
+    <None Include="..\shader\combine.vert" />
     <None Include="..\shader\depth.frag" />
     <None Include="..\shader\depth.vert" />
     <None Include="..\shader\phong.frag" />

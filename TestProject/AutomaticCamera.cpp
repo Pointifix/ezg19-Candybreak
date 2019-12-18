@@ -105,7 +105,7 @@ void AutomaticCamera::update()
 		currentControlPoints[3] = curves[currentIndices[0]][currentIndices[1] + 3];
 	}
 
-	float localT = (global::t - currentControlPoints[1].t) * (1.0 / (currentControlPoints[2].t - currentControlPoints[1].t));
+	double localT = (global::t - currentControlPoints[1].t) * (1.0 / (currentControlPoints[2].t - currentControlPoints[1].t));
 
 	this->position = glm::catmullRom(currentControlPoints[0].position, currentControlPoints[1].position, currentControlPoints[2].position, currentControlPoints[3].position, localT);
 	glm::vec3 newRotation = glm::catmullRom(currentControlPoints[0].rotation, currentControlPoints[1].rotation, currentControlPoints[2].rotation, currentControlPoints[3].rotation, localT);
@@ -119,6 +119,6 @@ void AutomaticCamera::processInput()
 {
 }
 
-void AutomaticCamera::processMouseMovement(float xoffset, float yoffset)
+void AutomaticCamera::processMouseMovement(double xoffset, double yoffset)
 {
 }

@@ -23,21 +23,21 @@ void FreeCamera::update()
 void FreeCamera::processInput()
 {
 	if (glfwGetKey(global::window, GLFW_KEY_W) == GLFW_PRESS)
-		processKeyboard(FORWARD, global::deltaTime);
+		processKeyboard(FORWARD, global::deltaTimeRenderEngine);
 	if (glfwGetKey(global::window, GLFW_KEY_S) == GLFW_PRESS)
-		processKeyboard(BACKWARD, global::deltaTime);
+		processKeyboard(BACKWARD, global::deltaTimeRenderEngine);
 	if (glfwGetKey(global::window, GLFW_KEY_A) == GLFW_PRESS)
-		processKeyboard(LEFT, global::deltaTime);
+		processKeyboard(LEFT, global::deltaTimeRenderEngine);
 	if (glfwGetKey(global::window, GLFW_KEY_D) == GLFW_PRESS)
-		processKeyboard(RIGHT, global::deltaTime);
+		processKeyboard(RIGHT, global::deltaTimeRenderEngine);
 	
 	if (glfwGetKey(global::window, GLFW_KEY_Q) == GLFW_PRESS)
-		processKeyboard(ROLLLEFT, global::deltaTime);
+		processKeyboard(ROLLLEFT, global::deltaTimeRenderEngine);
 	if (glfwGetKey(global::window, GLFW_KEY_E) == GLFW_PRESS)
-		processKeyboard(ROLLRIGHT, global::deltaTime);
+		processKeyboard(ROLLRIGHT, global::deltaTimeRenderEngine);
 }
 
-void FreeCamera::processMouseMovement(float xoffset, float yoffset)
+void FreeCamera::processMouseMovement(double xoffset, double yoffset)
 {
 	xoffset *= mouseSensitivity;
 	yoffset *= mouseSensitivity;
@@ -46,9 +46,9 @@ void FreeCamera::processMouseMovement(float xoffset, float yoffset)
 	changePitch(yoffset);
 }
 
-void FreeCamera::processKeyboard(FreeCameraMovement direction, float deltaTime)
+void FreeCamera::processKeyboard(FreeCameraMovement direction, double deltaTime)
 {
-	float velocity = movementSpeed * deltaTime;
+	float velocity = movementSpeed * (float)deltaTime;
 	if (direction == FORWARD)
 		position += front * velocity;
 	if (direction == BACKWARD)

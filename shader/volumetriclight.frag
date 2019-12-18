@@ -27,7 +27,7 @@ uniform DirectionalLight directionalLight;
 
 uniform vec3 viewPos;
 
-const int NUM_SAMPLES = 64;
+const int NUM_SAMPLES = 256;
 
 float volumetric_lighting_directional(vec3 frag_pos);
 vec3 world_pos_from_depth(float depth);
@@ -39,8 +39,6 @@ void main()
 	vec3 frag_pos = world_pos_from_depth(depth);
 	
 	vec4 outColor = vec4(volumetric_lighting_directional(frag_pos) * directionalLight.diffuse, depth);
-
-	outColor.a *= 0.5;
 
 	FragColor = outColor;
 }
@@ -93,7 +91,7 @@ float volumetric_lighting_directional(vec3 frag_pos)
 		ray_position_lightview += step_size_lightview * delta_lightview;
 		ray_position_worldspace += step_size_worldspace * delta_worldspace;
 	}
-	
+
 	return min(light_contribution, 1.0);
 }
 

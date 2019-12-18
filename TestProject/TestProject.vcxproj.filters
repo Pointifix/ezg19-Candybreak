@@ -43,14 +43,14 @@
     <Filter Include="Quelldateien\Render\Light">
       <UniqueIdentifier>{74bd6c42-fcd6-46b4-8d1a-4896582ed8a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Quelldateien\Render\Utility">
+      <UniqueIdentifier>{39f49c1a-bda3-4cc1-b70f-4da219329efc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Render\Utility">
+      <UniqueIdentifier>{d5c03ea4-04db-47bd-8829-ab2b8b859f4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RenderEngine.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="LogicEngine.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="Globals.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -75,9 +75,6 @@
     <ClInclude Include="Skybox.h">
       <Filter>Headerdateien\Render</Filter>
     </ClInclude>
-    <ClInclude Include="ModelManager.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="VolumentricLightShader.h">
       <Filter>Headerdateien\Render\Shader</Filter>
     </ClInclude>
@@ -93,17 +90,32 @@
     <ClInclude Include="AutomaticCamera.h">
       <Filter>Headerdateien\Render\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="FrameBuffer.h">
+      <Filter>Headerdateien\Render\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="BlurShader.h">
+      <Filter>Headerdateien\Render\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicEngine.h">
+      <Filter>Headerdateien\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="CombineShader.h">
+      <Filter>Headerdateien\Render\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Breakout.h">
+      <Filter>Headerdateien\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderEngine.h">
+      <Filter>Headerdateien\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
+      <Filter>Headerdateien\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Bricks.h">
+      <Filter>Headerdateien\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="RenderEngine.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="LogicEngine.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="InputHandler.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="glad.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -125,9 +137,6 @@
     <ClCompile Include="Skybox.cpp">
       <Filter>Quelldateien\Render</Filter>
     </ClCompile>
-    <ClCompile Include="ModelManager.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="VolumentricLightShader.cpp">
       <Filter>Quelldateien\Render\Shader</Filter>
     </ClCompile>
@@ -148,6 +157,33 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Quelldateien\Render\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameBuffer.cpp">
+      <Filter>Quelldateien\Render\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="BlurShader.cpp">
+      <Filter>Quelldateien\Render\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Breakout.cpp">
+      <Filter>Quelldateien\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderEngine.cpp">
+      <Filter>Quelldateien\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicEngine.cpp">
+      <Filter>Quelldateien\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="CombineShader.cpp">
+      <Filter>Quelldateien\Render\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandler.cpp">
+      <Filter>Quelldateien\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
+      <Filter>Quelldateien\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Bricks.cpp">
+      <Filter>Quelldateien\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +209,18 @@
       <Filter>Ressourcendateien</Filter>
     </None>
     <None Include="..\shader\depth.vert">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\blur.frag">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\blur.vert">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\combine.frag">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\combine.vert">
       <Filter>Ressourcendateien</Filter>
     </None>
   </ItemGroup>

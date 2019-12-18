@@ -15,17 +15,26 @@
 #include "FreeCamera.h"
 #include "AutomaticCamera.h"
 #include "InputHandler.h"
+
+#include "CombineShader.h"
+#include "BlurShader.h"
 #include "VolumentricLightShader.h"
 #include "PhongShader.h"
 #include "DepthShader.h"
+
 #include "Skybox.h"
 #include "ModelManager.h"
+#include "FrameBuffer.h"
 
+std::unique_ptr<CombineShader> combineShader;
+std::unique_ptr<BlurShader> blurShader;
 std::unique_ptr<VolumetricLightShader> volumetricLightShader;
 std::unique_ptr<PhongShader> phongShader;
 std::unique_ptr<DepthShader> depthShader;
 
 std::unique_ptr<ModelManager> modelManager;
+
+std::unique_ptr<FrameBuffer> offScreenFrameBuffer;
 
 RenderEngine::RenderEngine()
 {
@@ -47,7 +56,7 @@ void RenderEngine::run(std::promise<int> && error)
 		return;
 	}
 
-	while (!glfwWindowShouldClose(global::window))
+	while (!global::windowShouldClose)
 	{
 		update();
 		render();
@@ -58,69 +67,98 @@ void RenderEngine::run(std::promise<int> && error)
 
 void RenderEngine::update()
 {
+	global::windowShouldClose = glfwWindowShouldClose(global::window);
+
 	currentFrame = glfwGetTime();
-	global::deltaTime = currentFrame - lastFrame;
+	global::deltaTimeRenderEngine = currentFrame - lastFrame;
 	lastFrame = currentFrame;
 
-	global::t = 1.0f - ((float)(global::candylandSong->getPlayLength() - global::candylandSong->getPlayPosition()) / global::candylandSong->getPlayLength());
-	if (global::t > 1.0) global::t = 1.0;
+	global::t = 1.0f - ((songLength - (currentFrame - startTime)) / songLength);
+	if (global::t > 1.0f) global::t = 1.0f;
 
 	processInput();
+
+	modelManager->ball->model = glm::translate(glm::mat4(1.0f), glm::vec3(breakout::ballPosition));
+	modelManager->pad->model = glm::translate(glm::mat4(1.0f), glm::vec3(breakout::padPosition));
+
+	modelManager->bricks->update();
 
 	global::camera->update();
 }
 
 void RenderEngine::render()
 {
+	// opengl settings, view/projection calculation --------------------------------------------------------------------------------------------------------
 	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glCullFace(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, offScreenFrameBuffer->FBO);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glm::mat4 view = global::camera->getViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)setting::SCREEN_WIDTH / (float)setting::SCREEN_HEIGHT, 0.1f, 500.0f);
 
+	// depthmap --------------------------------------------------------------------------------------------------------------------------------------------
+
 	depthShader->use(global::directionalLight->view, global::directionalLight->projection);
-	//depthShader->draw(*modelManager->map);
-	depthShader->draw(*modelManager->tree);
+	depthShader->draw(*modelManager->map);
+	depthShader->draw(*modelManager->ball);
+	depthShader->draw(*modelManager->pad);
 	depthShader->finish();
 
+	// illumination and skybox -----------------------------------------------------------------------------------------------------------------------------
 	phongShader->use(view, projection, depthShader->depthmap);
-	//phongShader->draw(*modelManager->map);
-	phongShader->draw(*modelManager->tree);
+	phongShader->draw(*modelManager->map);
+	phongShader->draw(*modelManager->ball);
+	phongShader->draw(*modelManager->pad);
 
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, phongShader->FBO);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-
-	glBlitFramebuffer(0, 0, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, 0, 0, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-	glBlitFramebuffer(0, 0, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, 0, 0, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-	
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	breakout::bricksPositionMutex.lock();
+	phongShader->drawInstanced(*modelManager->brick, breakout::bricksPosition.size());
+	breakout::bricksPositionMutex.unlock();
 
 	drawSkybox(view, projection);
 
-	volumetricLightShader->use(view, projection, depthShader->depthmap, phongShader->depthmap);
-	volumetricLightShader->finish();
+	// volumetric lighting ---------------------------------------------------------------------------------------------------------------------------------
 
+	volumetricLightShader->use(view, projection, depthShader->depthmap, phongShader->framebuffer->FBOdepthmap);
+
+	volumetricLightShader->finish(offScreenFrameBuffer->FBO);
+
+	// blur ------------------------------------------------------------------------------------------------------------------------------------------------
+
+	blurShader->blur(offScreenFrameBuffer->FBOtexture, 1);
+
+	// combine ---------------------------------------------------------------------------------------------------------------------------------------------
+
+	combineShader->combine(phongShader->framebuffer->FBOtexture, blurShader->blurredTexture, 0);
+
+	// swap buffers, poll events --------------------------------------------------------------------------------------------------------------------------
 	glfwSwapBuffers(global::window);
 	glfwPollEvents();
 }
 
 int RenderEngine::init()
 {
-	if (setting::CAMERA_MODE == "auto") global::camera = new AutomaticCamera();
-	if (global::camera == nullptr) global::camera = new FreeCamera(glm::vec3(0.0f, 0.0f, 100.0f));
+	if (setting::CAMERA_MODE == "auto") global::camera = std::make_unique<AutomaticCamera>();
+	if (global::camera == nullptr) global::camera = std::make_unique<FreeCamera>(glm::vec3(0.0f, 0.0f, 100.0f));
 
 	// glfw: initialize and configure
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.6);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	// glfw window creation
 	if (setting::FULLSCREEN)
 	{
 		GLFWmonitor* primary = glfwGetPrimaryMonitor();
 		global::window = glfwCreateWindow(1980, 1080, setting::TITLE.c_str(), primary, nullptr);
+
+		setting::SCREEN_WIDTH = 1980;
+		setting::SCREEN_HEIGHT = 1080;
 	}
 	else
 	{
@@ -163,10 +201,14 @@ int RenderEngine::init()
 
 	global::candylandSong = global::SoundEngine->play2D("../assets/Candyland-Tobu.mp3", false, false, ESM_NO_STREAMING);
 
-	lastFrame = glfwGetTime();
+	songLength = global::candylandSong->getPlayLength() / 1000.0f;
+
+	startTime = glfwGetTime();
+	lastFrame = startTime;
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -179,14 +221,18 @@ int RenderEngine::init()
 	global::directionalLight->diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
 	global::directionalLight->specular = glm::vec3(0.8f, 0.8f, 0.8f);
 
-	global::directionalLight->projection = glm::ortho(-100.0f, 100.0f, -100.0f, 100.0f, 0.1f, 1000.0f);
+	global::directionalLight->projection = glm::ortho(-150.0f, 150.0f, -150.0f, 150.0f, 0.1f, 1000.0f);
 	global::directionalLight->view = glm::lookAt(global::directionalLight->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
+	combineShader = std::make_unique<CombineShader>();
+	blurShader = std::make_unique<BlurShader>();
 	volumetricLightShader = std::make_unique<VolumetricLightShader>();
 	phongShader = std::make_unique<PhongShader>();
 	depthShader = std::make_unique<DepthShader>();
 
 	modelManager = std::make_unique<ModelManager>();
+
+	offScreenFrameBuffer = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT);
 
 	// return 0 if everything is fine
 	return 0;

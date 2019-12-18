@@ -1,5 +1,4 @@
 #pragma once
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -34,8 +33,8 @@ public:
 
 	void processInput();
 	void update();
-	void processMouseMovement(float xoffset, float yoffset);
+	void processMouseMovement(double xoffset, double yoffset);
 private:
-	void processKeyboard(FreeCameraMovement direction, float deltaTime);
+	void processKeyboard(FreeCameraMovement direction, double deltaTime);
 };
 

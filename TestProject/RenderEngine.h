@@ -12,6 +12,6 @@ public:
 	void render();
 	int init();
 private:
-	float currentFrame, lastFrame;
+	double startTime, songLength;
+	double currentFrame, lastFrame;
 };
-

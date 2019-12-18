@@ -5,4 +5,6 @@ public:
 	LogicEngine();
 	~LogicEngine();
 	void run();
+private:
+	double currentFrame, lastFrame;
 };

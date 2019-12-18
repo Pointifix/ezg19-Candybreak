@@ -1,7 +1,7 @@
 #include "DepthShader.h"
 #include "Globals.h"
 
-const int SIZE = 2048;
+const int SIZE = 4096;
 
 DepthShader::DepthShader()
 {
@@ -10,8 +10,8 @@ DepthShader::DepthShader()
 	glGenTextures(1, &depthmap);
 	glBindTexture(GL_TEXTURE_2D, depthmap);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SIZE, SIZE, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -28,7 +28,7 @@ DepthShader::DepthShader()
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if (status != GL_FRAMEBUFFER_COMPLETE)
 	{
-		std::cout << "VOLUMETRIC LIGHT FRAMEBUFFER INITIALIZATION FAILED" << std::endl;
+		std::cout << "FRAMEBUFFER INITIALIZATION FAILED" << std::endl;
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

@@ -17,5 +17,5 @@ public:
 
 	void processInput();
 	void update();
-	void processMouseMovement(float xoffset, float yoffset);
+	void processMouseMovement(double xoffset, double yoffset);
 };
