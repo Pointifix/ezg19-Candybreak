@@ -6,6 +6,7 @@ struct Material {
     sampler2D specular;
 	vec3 diffuseColor;
     float shininess;
+	bool diffuseMode;
 }; 
 
 struct DirectionalLight {
@@ -50,9 +51,14 @@ vec4 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir)
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
-    vec4 ambient = vec4(light.ambient, 1.0) * texture(material.diffuse, TexCoords);
-    vec4 diffuse = vec4(light.diffuse, 1.0) * vec4(material.diffuseColor, 1.0) * diff * texture(material.diffuse, TexCoords);
-    vec4 specular = vec4(light.specular, 1.0) * spec * texture(material.specular, TexCoords);
+	vec4 color;
+
+	if (material.diffuseMode) color = vec4(material.diffuseColor, 1.0);
+	else color = texture(material.diffuse, TexCoords);
+
+    vec4 ambient = vec4(light.ambient, 1.0) * color;
+	vec4 diffuse = vec4(light.diffuse, 1.0) * diff * color;
+    vec4 specular = vec4(light.specular, 1.0) * spec * color;
 
 	float shadow = ShadowCalculation(FragPosLightSpace, light, normal, lightDir);
 
