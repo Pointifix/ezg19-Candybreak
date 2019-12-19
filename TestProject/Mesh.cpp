@@ -1,11 +1,12 @@
 #pragma once
 #include "Mesh.h"
 
-Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures)
+Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, shared_ptr<Material> material)
 {
 	this->vertices = vertices;
 	this->indices = indices;
 	this->textures = textures;
+	this->material = material;
 
 	setupMesh();
 }

@@ -9,6 +9,7 @@ ModelManager::ModelManager()
 	this->ball = std::make_unique<Model>("../assets/Ball/ball.obj");
 	this->pad = std::make_unique<Model>("../assets/Pad/pad.obj");
 	this->light = std::make_unique<Model>("../assets/Ball/ball.obj");
+	this->candyCane = std::make_unique<Model>("../assets/Map/Candys/candy cane.obj");
 
 	this->light->model = glm::translate(glm::mat4(1.0f), glm::vec3(20.0f, 0.0f, 0.0f));
 
@@ -28,7 +29,7 @@ ModelManager::ModelManager()
 
 	vector<Texture> screenQuadTextures;
 
-	this->screenQuad = std::make_unique<Mesh>(screenQuadVertices, screenQuadIndices, screenQuadTextures);
+	this->screenQuad = std::make_unique<Mesh>(screenQuadVertices, screenQuadIndices, screenQuadTextures, nullptr);
 	global::screenQuadVAO = this->screenQuad->VAO;
 }
 

@@ -46,6 +46,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 	vector<Vertex> vertices;
 	vector<unsigned int> indices;
 	vector<Texture> textures;
+	shared_ptr<Material> material;
 
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -84,22 +85,27 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 			indices.push_back(face.mIndices[j]);
 	}
 
-	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+	aiMaterial* aiMaterial = scene->mMaterials[mesh->mMaterialIndex];
+
+	aiColor4D diffuse;
+	aiGetMaterialColor(aiMaterial, AI_MATKEY_COLOR_DIFFUSE, &diffuse);
+	material = make_shared<Material>();
+	material->diffuse = glm::vec3(diffuse.r, diffuse.g, diffuse.b);
 
 	// 1. diffuse maps
-	vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+	vector<Texture> diffuseMaps = loadMaterialTextures(aiMaterial, aiTextureType_DIFFUSE, "texture_diffuse");
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 	// 2. specular maps
-	vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+	vector<Texture> specularMaps = loadMaterialTextures(aiMaterial, aiTextureType_SPECULAR, "texture_specular");
 	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	// 3. normal maps
-	std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+	std::vector<Texture> normalMaps = loadMaterialTextures(aiMaterial, aiTextureType_HEIGHT, "texture_normal");
 	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 	// 4. height maps
-	std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+	std::vector<Texture> heightMaps = loadMaterialTextures(aiMaterial, aiTextureType_AMBIENT, "texture_height");
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-	return Mesh(vertices, indices, textures);
+	return Mesh(vertices, indices, textures, material);
 }
 
 vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName)

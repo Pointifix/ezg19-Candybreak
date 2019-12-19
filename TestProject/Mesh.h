@@ -26,15 +26,20 @@ struct Texture {
 	string path;
 };
 
+struct Material {
+	glm::vec3 diffuse;
+};
+
 class Mesh
 {
 public:
 	vector<Vertex> vertices;
 	vector<unsigned int> indices;
 	vector<Texture> textures;
+	shared_ptr<Material> material;
 	unsigned int VAO;
 
-	Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures);
+	Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, shared_ptr<Material> material);
 	~Mesh();
 private:
 	unsigned int VBO, EBO;

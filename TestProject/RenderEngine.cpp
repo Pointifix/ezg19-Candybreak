@@ -113,6 +113,7 @@ void RenderEngine::render()
 	phongShader->draw(*modelManager->map);
 	phongShader->draw(*modelManager->ball);
 	phongShader->draw(*modelManager->pad);
+	phongShader->draw(*modelManager->candyCane);
 
 	breakout::bricksPositionMutex.lock();
 	phongShader->drawInstanced(*modelManager->brick, breakout::bricksPosition.size());

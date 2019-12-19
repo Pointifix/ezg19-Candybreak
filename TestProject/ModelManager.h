@@ -14,6 +14,7 @@ public:
 	std::unique_ptr<Model>ball;
 	std::unique_ptr<Model>pad;
 	std::unique_ptr<Model>light;
+	std::unique_ptr<Model>candyCane;
 
 	std::unique_ptr<Bricks>bricks;
 
