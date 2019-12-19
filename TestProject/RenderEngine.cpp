@@ -123,17 +123,17 @@ void RenderEngine::render()
 
 	// volumetric lighting ---------------------------------------------------------------------------------------------------------------------------------
 
-	volumetricLightShader->use(view, projection, depthShader->depthmap, phongShader->framebuffer->FBOdepthmap);
+	//volumetricLightShader->use(view, projection, depthShader->depthmap, phongShader->framebuffer->FBOdepthmap);
 
-	volumetricLightShader->finish(offScreenFrameBuffer->FBO);
+	//volumetricLightShader->finish(offScreenFrameBuffer->FBO);
 
 	// blur ------------------------------------------------------------------------------------------------------------------------------------------------
 
-	blurShader->blur(offScreenFrameBuffer->FBOtexture, 1);
+	//blurShader->blur(offScreenFrameBuffer->FBOtexture, 1);
 
 	// combine ---------------------------------------------------------------------------------------------------------------------------------------------
 
-	combineShader->combine(phongShader->framebuffer->FBOtexture, blurShader->blurredTexture, 0);
+	combineShader->combine(phongShader->framebuffer->FBOtexture, phongShader->framebuffer->FBOtexture, 0);
 
 	// swap buffers, poll events --------------------------------------------------------------------------------------------------------------------------
 	glfwSwapBuffers(global::window);

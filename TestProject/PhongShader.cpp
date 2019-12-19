@@ -74,6 +74,7 @@ void PhongShader::draw(Model model)
 		}
 
 		shader->setVec3("material.diffuseColor", mesh.material->diffuse);
+		shader->setBool("material.diffuseMode", mesh.textures.size() == 0);
 
 		glBindVertexArray(mesh.VAO);
 		glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, 0);
