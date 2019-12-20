@@ -14,12 +14,9 @@ VolumetricLightShader::~VolumetricLightShader()
 {
 }
 
-void VolumetricLightShader::use(glm::mat4 view, glm::mat4 projection, GLuint lightDepthMap, GLuint depthmap)
+void VolumetricLightShader::perform(glm::mat4 view, glm::mat4 projection, GLuint lightDepthMap, GLuint depthmap)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, this->framebuffer->FBO);
-
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	this->framebuffer->bind();
 
 	shader->use();
 
@@ -45,16 +42,12 @@ void VolumetricLightShader::use(glm::mat4 view, glm::mat4 projection, GLuint lig
 
 	shader->setMat4("viewInv", glm::inverse(view));
 	shader->setMat4("projectionInv", glm::inverse(projection));
-}
-
-void VolumetricLightShader::finish(GLuint framebuffer)
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
 	glBindVertexArray(global::screenQuadVAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glViewport(0, 0, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

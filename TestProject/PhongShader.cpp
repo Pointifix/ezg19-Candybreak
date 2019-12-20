@@ -4,7 +4,7 @@ PhongShader::PhongShader()
 {
 	shader = std::make_unique<Shader>("../shader/phong.vert", "../shader/phong.frag");
 
-	framebuffer = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT);
+	framebuffer = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT, true);
 }
 
 PhongShader::~PhongShader()
@@ -13,9 +13,7 @@ PhongShader::~PhongShader()
 
 void PhongShader::use(glm::mat4 view, glm::mat4 projection, GLuint depthmap)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, this->framebuffer->FBO);
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	this->framebuffer->bind();
 
 	shader->use();
 
@@ -73,7 +71,7 @@ void PhongShader::draw(Model model)
 			glBindTexture(GL_TEXTURE_2D, mesh.textures[j].id);
 		}
 
-		shader->setVec3("material.diffuseColor", mesh.material->diffuse);
+		shader->setVec4("material.diffuseColor", mesh.material->diffuse);
 		shader->setBool("material.diffuseMode", mesh.textures.size() == 0);
 
 		glBindVertexArray(mesh.VAO);
@@ -111,6 +109,9 @@ void PhongShader::drawInstanced(Model model, int size)
 		// and finally bind the texture
 		glBindTexture(GL_TEXTURE_2D, model.meshes[0].textures[i].id);
 	}
+
+	shader->setVec4("material.diffuseColor", model.meshes[0].material->diffuse);
+	shader->setBool("material.diffuseMode", model.meshes[0].textures.size() == 0);
 
 	glBindVertexArray(model.meshes[0].VAO);
 	glDrawElementsInstanced(GL_TRIANGLES, model.meshes[0].indices.size(), GL_UNSIGNED_INT, 0, size);

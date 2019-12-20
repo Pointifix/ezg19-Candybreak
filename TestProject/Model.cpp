@@ -89,8 +89,11 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 
 	aiColor4D diffuse;
 	aiGetMaterialColor(aiMaterial, AI_MATKEY_COLOR_DIFFUSE, &diffuse);
+	float alpha;
+	aiGetMaterialFloat(aiMaterial, AI_MATKEY_OPACITY, &alpha);
+
 	material = make_shared<Material>();
-	material->diffuse = glm::vec3(diffuse.r, diffuse.g, diffuse.b);
+	material->diffuse = glm::vec4(diffuse.r, diffuse.g, diffuse.b, alpha);
 
 	// 1. diffuse maps
 	vector<Texture> diffuseMaps = loadMaterialTextures(aiMaterial, aiTextureType_DIFFUSE, "texture_diffuse");

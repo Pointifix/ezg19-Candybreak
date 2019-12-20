@@ -9,16 +9,18 @@
 class BlurShader
 {
 public:
-	BlurShader();
+	BlurShader(int width, int height);
 	~BlurShader();
 
 	GLuint blurredFBO;
 	GLuint blurredTexture;
 
-	void blur(GLuint texture, int iterations);
+	void blur(GLuint texture, int iterations, bool bloom = false);
 private:
 	std::unique_ptr<Shader> shader;
 
 	GLuint pingpongFBO[2];
 	GLuint pingpongBuffer[2];
+
+	int width, height;
 };

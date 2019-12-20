@@ -14,7 +14,7 @@ public:
 	CombineShader();
 	~CombineShader();
 
-	void combine(GLuint texture1, GLuint texture2, GLuint framebuffer);
+	void combine(GLuint texture1, GLuint texture2, GLuint framebuffer, int mode = 0);
 private:
 	std::unique_ptr<Shader> shader;
 };

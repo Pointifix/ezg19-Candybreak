@@ -27,7 +27,7 @@ struct Texture {
 };
 
 struct Material {
-	glm::vec3 diffuse;
+	glm::vec4 diffuse;
 };
 
 class Mesh

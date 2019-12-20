@@ -114,6 +114,9 @@
     <ClInclude Include="Bricks.h">
       <Filter>Headerdateien\Render</Filter>
     </ClInclude>
+    <ClInclude Include="BloomShader.h">
+      <Filter>Headerdateien\Render\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -185,6 +188,9 @@
     <ClCompile Include="Bricks.cpp">
       <Filter>Quelldateien\Render</Filter>
     </ClCompile>
+    <ClCompile Include="BloomShader.cpp">
+      <Filter>Quelldateien\Render\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\shader\skybox.frag">
@@ -221,6 +227,12 @@
       <Filter>Ressourcendateien</Filter>
     </None>
     <None Include="..\shader\combine.vert">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\bloom.frag">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\bloom.vert">
       <Filter>Ressourcendateien</Filter>
     </None>
   </ItemGroup>

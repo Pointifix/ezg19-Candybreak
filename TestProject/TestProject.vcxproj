@@ -162,6 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BloomShader.h" />
     <ClInclude Include="BlurShader.h" />
     <ClInclude Include="Breakout.h" />
     <ClInclude Include="Bricks.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="VolumentricLightShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BloomShader.cpp" />
     <ClCompile Include="BlurShader.cpp" />
     <ClCompile Include="Breakout.cpp" />
     <ClCompile Include="Bricks.cpp" />
@@ -210,6 +212,8 @@
     <ClCompile Include="VolumentricLightShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\shader\bloom.frag" />
+    <None Include="..\shader\bloom.vert" />
     <None Include="..\shader\blur.frag" />
     <None Include="..\shader\blur.vert" />
     <None Include="..\shader\combine.frag" />

@@ -1,8 +1,11 @@
 #include "BlurShader.h"
 
-BlurShader::BlurShader()
+BlurShader::BlurShader(int width, int height)
 {
 	shader = std::make_unique<Shader>("../shader/blur.vert", "../shader/blur.frag");
+
+	this->width = width;
+	this->height = height;
 
 	glGenFramebuffers(2, pingpongFBO);
 	glGenTextures(2, pingpongBuffer);
@@ -10,7 +13,7 @@ BlurShader::BlurShader()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[i]);
 		glBindTexture(GL_TEXTURE_2D, pingpongBuffer[i]);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -23,10 +26,11 @@ BlurShader::~BlurShader()
 {
 }
 
-void BlurShader::blur(GLuint texture, int iterations)
+void BlurShader::blur(GLuint texture, int iterations, bool bloom)
 {
 	shader->use();
 
+	glViewport(0, 0, width, height);
 	glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[true]);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -40,6 +44,7 @@ void BlurShader::blur(GLuint texture, int iterations)
 	shader->setInt("image", 0);
 	for (int i = 0; i < iterations * 2; i++)
 	{
+		shader->setBool("bloom", bloom && first_iteration);
 		glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[horizontal]);
 		shader->setBool("horizontal", horizontal);
 		glBindTexture(GL_TEXTURE_2D, first_iteration ? texture : pingpongBuffer[!horizontal]);
@@ -51,6 +56,7 @@ void BlurShader::blur(GLuint texture, int iterations)
 		if (first_iteration) first_iteration = false;
 	}
 
+	glViewport(0, 0, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	this->blurredFBO = pingpongFBO[!horizontal];

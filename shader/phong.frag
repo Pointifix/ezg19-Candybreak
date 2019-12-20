@@ -4,7 +4,7 @@ out vec4 FragColor;
 struct Material {
     sampler2D diffuse;
     sampler2D specular;
-	vec3 diffuseColor;
+	vec4 diffuseColor;
     float shininess;
 	bool diffuseMode;
 }; 
@@ -40,6 +40,7 @@ void main()
     vec3 viewDir = normalize(viewPos - FragPos);
     
     vec4 result = CalcDirectionalLight(directionalLight, norm, viewDir);
+	if (result.a > 1.0) result.a = 1.0;
 
     FragColor = result;
 }
@@ -52,8 +53,7 @@ vec4 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir)
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
 	vec4 color;
-
-	if (material.diffuseMode) color = vec4(material.diffuseColor, 1.0);
+	if (material.diffuseMode) color = material.diffuseColor;
 	else color = texture(material.diffuse, TexCoords);
 
     vec4 ambient = vec4(light.ambient, 1.0) * color;
