@@ -26,7 +26,7 @@ void VolumetricLightShader::perform(glm::mat4 view, glm::mat4 projection, GLuint
 
 	glActiveTexture(GL_TEXTURE1);
 	shader->setInt("lightDepthMap", 1);
-	glBindTexture(GL_TEXTURE_2D, lightDepthMap);
+	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, lightDepthMap);
 
 	shader->setVec3("directionalLight.position", global::directionalLight->position);
 

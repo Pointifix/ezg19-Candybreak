@@ -16,7 +16,7 @@ void CombineShader::combine(GLuint texture1, GLuint texture2, GLuint framebuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1);
 	shader->setInt("texture1", 0);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture2);

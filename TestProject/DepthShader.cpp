@@ -34,11 +34,9 @@ DepthShader::DepthShader()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-
 DepthShader::~DepthShader()
 {
 }
-
 
 void DepthShader::use(glm::mat4 view, glm::mat4 projection)
 {
@@ -51,7 +49,6 @@ void DepthShader::use(glm::mat4 view, glm::mat4 projection)
 	shader->setMat4("view", view);
 	shader->setMat4("projection", projection);
 }
-
 
 void DepthShader::draw(Model model)
 {
@@ -66,7 +63,6 @@ void DepthShader::draw(Model model)
 		glBindVertexArray(0);
 	}
 }
-
 
 void DepthShader::finish()
 {

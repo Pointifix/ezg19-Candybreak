@@ -94,7 +94,7 @@ void RenderEngine::render()
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, offScreenFrameBuffer->FBO);
+	//glBindFramebuffer(GL_FRAMEBUFFER, offScreenFrameBuffer->FBO);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -121,24 +121,25 @@ void RenderEngine::render()
 	phongShader->drawInstanced(*modelManager->brick, breakout::bricksPosition.size());
 	breakout::bricksPositionMutex.unlock();
 
-	//drawSkybox(view, projection);
+	drawSkybox(view, projection);
 
+	/*
 	// bloom -----------------------------------------------------------------------------------------------------------------------------------------------
 
 	bloomShader->bloom(phongShader->framebuffer->FBOtexture);
 	blurShader->blur(bloomShader->framebuffer->FBOtexture, 2);
 
-	combineShader->combine(phongShader->framebuffer->FBOtexture, blurShader->blurredTexture, 0);
+	combineShader->combine(phongShader->framebuffer->FBOtexture, blurShader->blurredTexture, offScreenFrameBuffer->FBO);
 
 	// volumetric lighting ---------------------------------------------------------------------------------------------------------------------------------
 
-	//volumetricLightShader->perform(view, projection, depthShader->depthmap, phongShader->framebuffer->FBOdepthmap);
-	//blurShader->blur(volumetricLightShader->framebuffer->FBOtexture, 2);
+	volumetricLightShader->perform(view, projection, depthShader->depthmap, phongShader->framebuffer->FBOdepthmap);
+	blurShader->blur(volumetricLightShader->framebuffer->FBOtexture, 2);
 
 	// combine ---------------------------------------------------------------------------------------------------------------------------------------------
 
-	//combineShader->combine(offScreenFrameBuffer->FBOtexture, blurShader->blurredTexture, 0);
-
+	combineShader->combine(offScreenFrameBuffer->FBOtexture, blurShader->blurredTexture, 0);
+	*/
 	// swap buffers, poll events --------------------------------------------------------------------------------------------------------------------------
 	glfwSwapBuffers(global::window);
 	glfwPollEvents();
@@ -155,7 +156,7 @@ int RenderEngine::init()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	glfwWindowHint(GLFW_SAMPLES, 4);
+	//glfwWindowHint(GLFW_SAMPLES, 4);
 
 	// glfw window creation
 	if (setting::FULLSCREEN)
@@ -217,7 +218,7 @@ int RenderEngine::init()
 	glCullFace(GL_BACK);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_MULTISAMPLE);
+	//glEnable(GL_MULTISAMPLE);
 
 	initSkybox();
 	

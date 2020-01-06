@@ -14,7 +14,7 @@ public:
 	BloomShader();
 	~BloomShader();
 
-	const float OFF_SCREEN_RENDER_RATIO = 2.0f;
+	const float OFF_SCREEN_RENDER_RATIO = 1.0f;
 
 	std::unique_ptr<FrameBuffer> framebuffer;
 
