@@ -6,7 +6,7 @@
 #include "Model.h"
 #include "Shader.h"
 #include "FrameBuffer.h"
-
+#include "BlurShader.h"
 
 class BloomShader
 {
@@ -17,6 +17,8 @@ public:
 	const float OFF_SCREEN_RENDER_RATIO = 2.0f;
 
 	std::unique_ptr<FrameBuffer> framebuffer;
+
+	std::unique_ptr<BlurShader> blurShader;
 
 	void bloom(GLuint texture);
 private:

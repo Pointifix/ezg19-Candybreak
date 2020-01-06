@@ -29,14 +29,13 @@
 
 std::unique_ptr<CombineShader> combineShader;
 std::unique_ptr<BloomShader> bloomShader;
-std::unique_ptr<BlurShader> blurShader;
 std::unique_ptr<VolumetricLightShader> volumetricLightShader;
 std::unique_ptr<PhongShader> phongShader;
 std::unique_ptr<DepthShader> depthShader;
 
 std::unique_ptr<ModelManager> modelManager;
 
-std::unique_ptr<FrameBuffer> offScreenFrameBuffer;
+std::unique_ptr<FrameBuffer> phongResult, bloomResult, volumetricLightingResult;
 
 RenderEngine::RenderEngine()
 {
@@ -94,10 +93,9 @@ void RenderEngine::render()
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, offScreenFrameBuffer->FBO);
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	phongResult->bind();
+	bloomResult->bind();
+	volumetricLightingResult->bind();
 
 	glm::mat4 view = global::camera->getViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)setting::SCREEN_WIDTH / (float)setting::SCREEN_HEIGHT, 0.1f, 500.0f);
@@ -111,11 +109,13 @@ void RenderEngine::render()
 	depthShader->finish();
 
 	// illumination and skybox -----------------------------------------------------------------------------------------------------------------------------
+
 	phongShader->use(view, projection, depthShader->depthmap);
 	phongShader->draw(*modelManager->map);
 	phongShader->draw(*modelManager->ball);
 	phongShader->draw(*modelManager->pad);
-	phongShader->draw(*modelManager->light);
+
+	phongShader->draw(*modelManager->light, true);
 
 	breakout::bricksPositionMutex.lock();
 	phongShader->drawInstanced(*modelManager->brick, breakout::bricksPosition.size());
@@ -123,23 +123,22 @@ void RenderEngine::render()
 
 	drawSkybox(view, projection);
 
-	combineShader->combine(phongShader->framebuffer->FBOtexture, blurShader->blurredTexture, 0);
-
-	// bloom -----------------------------------------------------------------------------------------------------------------------------------------------
-
-	//bloomShader->bloom(phongShader->framebuffer->FBOtexture);
-	//blurShader->blur(bloomShader->framebuffer->FBOtexture, 2);
-
-	//combineShader->combine(phongShader->framebuffer->FBOtexture, blurShader->blurredTexture, 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, phongResult->FBO);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, phongShader->framebuffer->FBO);
+	glDrawBuffer(GL_BACK);
+	glBlitFramebuffer(0, 0, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, 0, 0, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
 	// volumetric lighting ---------------------------------------------------------------------------------------------------------------------------------
 
-	//volumetricLightShader->perform(view, projection, depthShader->depthmap, phongShader->framebuffer->FBOdepthmap);
-	//blurShader->blur(volumetricLightShader->framebuffer->FBOtexture, 2);
+	volumetricLightShader->perform(view, projection, depthShader->depthmap, phongResult->FBOdepthmap);
 
-	// combine ---------------------------------------------------------------------------------------------------------------------------------------------
+	combineShader->combine(volumetricLightShader->blurShader->blurredTexture, phongResult->FBOtexture, volumetricLightingResult->FBO, 1);
 
-	//combineShader->combine(offScreenFrameBuffer->FBOtexture, blurShader->blurredTexture, 0);
+	// bloom -----------------------------------------------------------------------------------------------------------------------------------------------
+
+	bloomShader->bloom(phongResult->FBOtexture);
+
+	combineShader->combine(volumetricLightingResult->FBOtexture, bloomShader->blurShader->blurredTexture, 0, 2);
 
 	// swap buffers, poll events --------------------------------------------------------------------------------------------------------------------------
 	glfwSwapBuffers(global::window);
@@ -223,24 +222,25 @@ int RenderEngine::init()
 	
 	global::directionalLight = std::make_unique<DirectionalLight>();
 	global::directionalLight->direction = glm::vec3(0.5f, -0.5f, -0.5f);
-	global::directionalLight->position = global::directionalLight->direction * (-500.0f);
+	global::directionalLight->position = global::directionalLight->direction * (-1000.0f);
 	global::directionalLight->ambient = glm::vec3(0.2f, 0.2f, 0.2f);
 	global::directionalLight->diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
 	global::directionalLight->specular = glm::vec3(0.8f, 0.8f, 0.8f);
 
-	global::directionalLight->projection = glm::ortho(-200.0f, 200.0f, -200.0f, 200.0f, 0.1f, 1000.0f);
+	global::directionalLight->projection = glm::ortho(-200.0f, 200.0f, -200.0f, 200.0f, 0.1f, 10000.0f);
 	global::directionalLight->view = glm::lookAt(global::directionalLight->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	combineShader = std::make_unique<CombineShader>();
 	bloomShader = std::make_unique<BloomShader>();
-	blurShader = std::make_unique<BlurShader>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT);
 	volumetricLightShader = std::make_unique<VolumetricLightShader>();
 	phongShader = std::make_unique<PhongShader>();
 	depthShader = std::make_unique<DepthShader>();
 
 	modelManager = std::make_unique<ModelManager>();
 
-	offScreenFrameBuffer = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT);
+	phongResult = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT);
+	bloomResult = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT);
+	volumetricLightingResult = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT);
 
 	// return 0 if everything is fine
 	return 0;

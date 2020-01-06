@@ -40,9 +40,10 @@ void PhongShader::use(glm::mat4 view, glm::mat4 projection, GLuint depthmap)
 	glBindTexture(GL_TEXTURE_2D, depthmap);
 }
 
-void PhongShader::draw(Model model)
+void PhongShader::draw(Model model, bool light)
 {
 	shader->setMat4("model", model.model);
+	shader->setBool("isALight", light);
 	
 	for (size_t i = 0; i < model.meshes.size(); i++)
 	{
@@ -84,6 +85,7 @@ void PhongShader::draw(Model model)
 void PhongShader::drawInstanced(Model model, int size)
 {
 	shader->setMat4("model", model.model);
+	shader->setBool("isALight", false);
 
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;

@@ -13,7 +13,7 @@ FrameBuffer::FrameBuffer(int width, int height, int internalFormat, int format, 
 	if (msaa)
 	{
 		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, FBOtexture);
-		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGB, width, height, GL_TRUE);
+		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA16F, width, height, GL_TRUE);
 		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
 
 		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, FBOdepthmap);
@@ -67,7 +67,6 @@ FrameBuffer::FrameBuffer(int width, int height, int internalFormat, int format, 
 FrameBuffer::~FrameBuffer()
 {
 }
-
 
 void FrameBuffer::bind()
 {

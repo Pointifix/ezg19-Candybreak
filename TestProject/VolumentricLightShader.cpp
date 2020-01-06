@@ -7,7 +7,9 @@ VolumetricLightShader::VolumetricLightShader()
 	offScreenWidth = setting::SCREEN_WIDTH / OFF_SCREEN_RENDER_RATIO;
 	offScreenHeight = setting::SCREEN_HEIGHT / OFF_SCREEN_RENDER_RATIO;
 
-	framebuffer = std::make_unique<FrameBuffer>(offScreenWidth, offScreenHeight);
+	blurShader = std::make_unique<BlurShader>(offScreenWidth, offScreenHeight);
+
+	framebuffer = std::make_unique<FrameBuffer>(offScreenWidth, offScreenHeight, GL_RGBA16F, GL_FLOAT);
 }
 
 VolumetricLightShader::~VolumetricLightShader()
@@ -46,6 +48,8 @@ void VolumetricLightShader::perform(glm::mat4 view, glm::mat4 projection, GLuint
 	glBindVertexArray(global::screenQuadVAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+
+	blurShader->blur(this->framebuffer->FBOtexture, 2);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glViewport(0, 0, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT);

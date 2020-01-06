@@ -22,6 +22,8 @@ in vec3 Normal;
 in vec2 TexCoords;
 in vec4 FragPosLightSpace;
 
+uniform bool isALight;
+
 uniform mat4 lightView;
 uniform mat4 lightProjection;
 
@@ -39,8 +41,17 @@ void main()
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
     
-    vec4 result = CalcDirectionalLight(directionalLight, norm, viewDir);
-	if (result.a > 1.0) result.a = 1.0;
+	vec4 result;
+
+	if (isALight)
+	{
+		result = material.diffuseColor;
+	}
+	else
+	{
+		result = CalcDirectionalLight(directionalLight, norm, viewDir);
+		if (result.a > 1.0) result.a = 1.0;
+	}
 
     FragColor = result;
 }

@@ -15,14 +15,14 @@ void CombineShader::combine(GLuint texture1, GLuint texture2, GLuint framebuffer
 
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
+	shader->setInt("mode", mode);
+
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1);
 	shader->setInt("texture1", 0);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture2);
 	shader->setInt("texture2", 1);
-
-	shader->setInt("mode", mode);
 
 	glBindVertexArray(global::screenQuadVAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
