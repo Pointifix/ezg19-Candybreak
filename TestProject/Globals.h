@@ -43,6 +43,15 @@ namespace global
 	extern std::atomic<double> deltaTimeRenderEngine; // dont access from another thread than render engine thread
 	extern std::atomic<double> deltaTimeLogicEngine; // dont access from another thread than logic engine thread
 	extern std::atomic<double> t;
+
+	// particle system
+	extern std::mutex particleSystemsToAddMutex;
+	struct particleSystem {
+		glm::vec3 position;
+		int particleCount;
+		glm::vec3 color;
+	};
+	extern std::vector<particleSystem> particleSystemsToAdd;
 }
 
 namespace breakout

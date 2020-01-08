@@ -18,6 +18,9 @@ namespace global
 	std::atomic<double> deltaTimeRenderEngine;
 	std::atomic<double> deltaTimeLogicEngine;
 	std::atomic<double> t;
+
+	std::mutex particleSystemsToAddMutex;
+	std::vector<particleSystem> particleSystemsToAdd;
 }
 
 namespace breakout

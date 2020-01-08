@@ -40,7 +40,7 @@ void main()
 	
 	vec4 outColor = vec4(volumetric_lighting_directional(frag_pos) * directionalLight.diffuse, depth);
 
-	FragColor = outColor * 5;
+	FragColor = outColor;
 }
 
 float volumetric_lighting_directional(vec3 frag_pos)

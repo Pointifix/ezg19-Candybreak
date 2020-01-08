@@ -26,6 +26,7 @@
 #include "Skybox.h"
 #include "ModelManager.h"
 #include "FrameBuffer.h"
+#include "ParticleSystem.h"
 
 std::unique_ptr<CombineShader> combineShader;
 std::unique_ptr<BloomShader> bloomShader;
@@ -36,6 +37,8 @@ std::unique_ptr<DepthShader> depthShader;
 std::unique_ptr<ModelManager> modelManager;
 
 std::unique_ptr<FrameBuffer> phongResult, bloomResult, volumetricLightingResult;
+
+std::vector<std::unique_ptr<ParticleSystem>> particleSystems;
 
 RenderEngine::RenderEngine()
 {
@@ -78,13 +81,37 @@ void RenderEngine::update()
 	if (global::t > 1.0f) global::t = 1.0f;
 
 	processInput();
+	global::camera->update();
 
+	// update breakout -------------------------------------------------------------------------------------------------------------------------------------
 	modelManager->ball->model = glm::translate(glm::mat4(1.0f), glm::vec3(breakout::ballPosition));
 	modelManager->pad->model = glm::translate(glm::mat4(1.0f), glm::vec3(breakout::padPosition));
 
 	modelManager->bricks->update();
 
-	global::camera->update();
+	// update particle systems -----------------------------------------------------------------------------------------------------------------------------
+
+	global::particleSystemsToAddMutex.lock();
+	for (int i = 0; i < global::particleSystemsToAdd.size(); i++)
+	{
+		particleSystems.push_back(std::make_unique<ParticleSystem>(global::particleSystemsToAdd[i].position, global::particleSystemsToAdd[i].particleCount, global::particleSystemsToAdd[i].color));
+		std::cout << "ADD PARTICLE SYSTEM" << std::endl;
+	}
+	global::particleSystemsToAdd.clear();
+	global::particleSystemsToAddMutex.unlock();
+
+	for (int i = 0; i < particleSystems.size(); i++)
+	{
+		if (particleSystems[i]->current_particle_count == 0)
+		{
+			particleSystems.erase(particleSystems.begin() + i, particleSystems.begin() + i + 1);
+			i--;
+		}
+		else
+		{
+			particleSystems[i]->update(global::deltaTimeRenderEngine);
+		}
+	}
 }
 
 void RenderEngine::render()
@@ -98,10 +125,9 @@ void RenderEngine::render()
 	volumetricLightingResult->bind();
 
 	glm::mat4 view = global::camera->getViewMatrix();
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)setting::SCREEN_WIDTH / (float)setting::SCREEN_HEIGHT, 0.1f, 500.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)setting::SCREEN_WIDTH / (float)setting::SCREEN_HEIGHT, 0.1f, 2000.0f);
 
 	// depthmap --------------------------------------------------------------------------------------------------------------------------------------------
-
 	depthShader->use(global::directionalLight->view, global::directionalLight->projection);
 	depthShader->draw(*modelManager->map);
 	depthShader->draw(*modelManager->ball);
@@ -109,7 +135,6 @@ void RenderEngine::render()
 	depthShader->finish();
 
 	// illumination and skybox -----------------------------------------------------------------------------------------------------------------------------
-
 	phongShader->use(view, projection, depthShader->depthmap);
 	phongShader->draw(*modelManager->map);
 	phongShader->draw(*modelManager->ball);
@@ -123,21 +148,24 @@ void RenderEngine::render()
 
 	drawSkybox(view, projection);
 
+	// particle systems ------------------------------------------------------------------------------------------------------------------------------------
+	for (int i = 0; i < particleSystems.size(); i++)
+	{
+		particleSystems[i]->draw(view, projection);
+	}
+
+	// copy msaa rendered scene into normal framebuffer ----------------------------------------------------------------------------------------------------
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, phongResult->FBO);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, phongShader->framebuffer->FBO);
 	glDrawBuffer(GL_BACK);
 	glBlitFramebuffer(0, 0, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, 0, 0, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
 	// volumetric lighting ---------------------------------------------------------------------------------------------------------------------------------
-
 	volumetricLightShader->perform(view, projection, depthShader->depthmap, phongResult->FBOdepthmap);
-
 	combineShader->combine(volumetricLightShader->blurShader->blurredTexture, phongResult->FBOtexture, volumetricLightingResult->FBO, 1);
 
 	// bloom -----------------------------------------------------------------------------------------------------------------------------------------------
-
 	bloomShader->bloom(phongResult->FBOtexture);
-
 	combineShader->combine(volumetricLightingResult->FBOtexture, bloomShader->blurShader->blurredTexture, 0, 2);
 
 	// swap buffers, poll events --------------------------------------------------------------------------------------------------------------------------

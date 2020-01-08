@@ -18,5 +18,5 @@ void main()
 	if (t > endT) localT = 1.0;
 	else if (t >= startT) localT = (t - startT) * (1.0 / (endT - startT));
 
-    FragColor = mix(texture(skybox1, TexCoords), texture(skybox2, TexCoords), localT);
+    FragColor = mix(texture(skybox1, TexCoords), texture(skybox2, TexCoords) * 0.5, localT);
 }

@@ -117,6 +117,12 @@
     <ClInclude Include="BloomShader.h">
       <Filter>Headerdateien\Render\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Headerdateien\Render\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ForcefieldShader.h">
+      <Filter>Headerdateien\Render\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -191,6 +197,12 @@
     <ClCompile Include="BloomShader.cpp">
       <Filter>Quelldateien\Render\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Quelldateien\Render\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ForcefieldShader.cpp">
+      <Filter>Quelldateien\Render\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\shader\skybox.frag">
@@ -233,6 +245,18 @@
       <Filter>Ressourcendateien</Filter>
     </None>
     <None Include="..\shader\bloom.vert">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\particle.comp">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\particle.frag">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\particle.geom">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\particle.vert">
       <Filter>Ressourcendateien</Filter>
     </None>
   </ItemGroup>

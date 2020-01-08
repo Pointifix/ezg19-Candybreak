@@ -89,7 +89,9 @@ void Breakout::boundaryCheck()
 			if (i == 4) breakout::hitQueues[i].push(glm::vec3((this->ballPosition.x + breakout::BOX_SIZE / 2) / breakout::BOX_SIZE, (-this->ballPosition.z + breakout::BOX_SIZE / 2) / breakout::BOX_SIZE, frame));
 			breakout::hitQueuesMutex.unlock();
 
-			//if (i < 5) particleSystems.push_back(std::make_unique<ParticleSystem>(this->ballPosition, 8, glm::vec3(1.0, 1.0, 1.0)));
+			global::particleSystemsToAddMutex.lock();
+			if (i < 5) global::particleSystemsToAdd.push_back({this->ballPosition, 16, glm::vec3(3.0, 3.0, 3.0)});
+			global::particleSystemsToAddMutex.unlock();
 		}
 	}
 }
