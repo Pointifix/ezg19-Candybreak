@@ -259,5 +259,11 @@
     <None Include="..\shader\particle.vert">
       <Filter>Ressourcendateien</Filter>
     </None>
+    <None Include="..\shader\forcefield.frag">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\forcefield.vert">
+      <Filter>Ressourcendateien</Filter>
+    </None>
   </ItemGroup>
 </Project>

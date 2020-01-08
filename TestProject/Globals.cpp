@@ -17,6 +17,7 @@ namespace global
 
 	std::atomic<double> deltaTimeRenderEngine;
 	std::atomic<double> deltaTimeLogicEngine;
+	std::atomic<double> currentFrameLogicEngine;
 	std::atomic<double> t;
 
 	std::mutex particleSystemsToAddMutex;

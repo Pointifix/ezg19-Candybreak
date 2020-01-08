@@ -42,6 +42,7 @@ namespace global
 	// time related values
 	extern std::atomic<double> deltaTimeRenderEngine; // dont access from another thread than render engine thread
 	extern std::atomic<double> deltaTimeLogicEngine; // dont access from another thread than logic engine thread
+	extern std::atomic<double> currentFrameLogicEngine; // dont access from another thread than logic engine thread
 	extern std::atomic<double> t;
 
 	// particle system

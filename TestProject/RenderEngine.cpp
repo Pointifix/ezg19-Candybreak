@@ -16,6 +16,7 @@
 #include "AutomaticCamera.h"
 #include "InputHandler.h"
 
+#include "ForcefieldShader.h"
 #include "CombineShader.h"
 #include "BloomShader.h"
 #include "BlurShader.h"
@@ -28,6 +29,7 @@
 #include "FrameBuffer.h"
 #include "ParticleSystem.h"
 
+std::unique_ptr<ForcefieldShader> forcefieldShader;
 std::unique_ptr<CombineShader> combineShader;
 std::unique_ptr<BloomShader> bloomShader;
 std::unique_ptr<VolumetricLightShader> volumetricLightShader;
@@ -76,6 +78,7 @@ void RenderEngine::update()
 	currentFrame = glfwGetTime();
 	global::deltaTimeRenderEngine = currentFrame - lastFrame;
 	lastFrame = currentFrame;
+	global::currentFrameLogicEngine = currentFrame;
 
 	global::t = 1.0f - ((songLength - (currentFrame - startTime)) / songLength);
 	if (global::t > 1.0f) global::t = 1.0f;
@@ -134,7 +137,7 @@ void RenderEngine::render()
 	depthShader->draw(*modelManager->pad);
 	depthShader->finish();
 
-	// illumination and skybox -----------------------------------------------------------------------------------------------------------------------------
+	// illumination, skybox and forcefield -----------------------------------------------------------------------------------------------------------------------------
 	phongShader->use(view, projection, depthShader->depthmap);
 	phongShader->draw(*modelManager->map);
 	phongShader->draw(*modelManager->ball);
@@ -147,6 +150,8 @@ void RenderEngine::render()
 	breakout::bricksPositionMutex.unlock();
 
 	drawSkybox(view, projection);
+
+	forcefieldShader->drawForcefield(view, projection);
 
 	// particle systems ------------------------------------------------------------------------------------------------------------------------------------
 	for (int i = 0; i < particleSystems.size(); i++)
@@ -258,6 +263,7 @@ int RenderEngine::init()
 	global::directionalLight->projection = glm::ortho(-200.0f, 200.0f, -200.0f, 200.0f, 0.1f, 10000.0f);
 	global::directionalLight->view = glm::lookAt(global::directionalLight->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
+	forcefieldShader = std::make_unique<ForcefieldShader>();
 	combineShader = std::make_unique<CombineShader>();
 	bloomShader = std::make_unique<BloomShader>();
 	volumetricLightShader = std::make_unique<VolumetricLightShader>();

@@ -224,6 +224,8 @@
     <None Include="..\shader\combine.vert" />
     <None Include="..\shader\depth.frag" />
     <None Include="..\shader\depth.vert" />
+    <None Include="..\shader\forcefield.frag" />
+    <None Include="..\shader\forcefield.vert" />
     <None Include="..\shader\particle.comp" />
     <None Include="..\shader\particle.frag" />
     <None Include="..\shader\particle.geom" />

@@ -3,17 +3,14 @@
 #include "Shader.h"
 #include "Model.h"
 #include "Breakout.h"
+#include "Globals.h"
 
 #include <queue>
-
-extern const float BOX_SIZE;
-extern Breakout breakout;
-extern float currentFrame;
 
 class ForcefieldShader
 {
 public:
-	ForcefieldShader(int x);
+	ForcefieldShader();
 	~ForcefieldShader();
 
 	void drawForcefield(glm::mat4& view, glm::mat4& projection);
@@ -31,6 +28,5 @@ private:
 	const float rotations[5] = {
 		0.0f, 90.0f, 180.0f, 270.0f, 90.0f
 	};
-
 };
 
