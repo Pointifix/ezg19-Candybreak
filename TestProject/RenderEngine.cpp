@@ -93,12 +93,10 @@ void RenderEngine::update()
 	modelManager->bricks->update();
 
 	// update particle systems -----------------------------------------------------------------------------------------------------------------------------
-
 	global::particleSystemsToAddMutex.lock();
 	for (int i = 0; i < global::particleSystemsToAdd.size(); i++)
 	{
 		particleSystems.push_back(std::make_unique<ParticleSystem>(global::particleSystemsToAdd[i].position, global::particleSystemsToAdd[i].particleCount, global::particleSystemsToAdd[i].color));
-		std::cout << "ADD PARTICLE SYSTEM" << std::endl;
 	}
 	global::particleSystemsToAdd.clear();
 	global::particleSystemsToAddMutex.unlock();
