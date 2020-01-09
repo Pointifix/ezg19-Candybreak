@@ -13,6 +13,7 @@ public:
 	std::unique_ptr<Model>brick;
 	std::unique_ptr<Model>ball;
 	std::unique_ptr<Model>pad;
+	std::unique_ptr<Model>plane;
 	std::unique_ptr<Model>light;
 
 	std::unique_ptr<Bricks>bricks;
