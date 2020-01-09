@@ -11,7 +11,7 @@ uniform int mode;
 vec4 toneMapping(vec4 color)
 {
 	const float gamma = 2.2;
-	const float exposure = 3.0;
+	const float exposure = 5.0;
 
     vec4 mapped = vec4(1.0) - exp(-color * exposure);
 	mapped = pow(mapped, vec4(1.0 / gamma));

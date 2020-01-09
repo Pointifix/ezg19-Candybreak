@@ -12,7 +12,7 @@ public:
 
 private:
 	glm::vec3 ballPosition;
-	glm::vec3 ballDirection = glm::vec3(0.5f, 0.5f, 0.5f);
+	glm::vec3 ballDirection = glm::vec3(0.5f, 0.9f, 0.7f);
 	glm::vec3 padPosition;
 
 	void boundaryCheck();
