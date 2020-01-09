@@ -7,7 +7,7 @@ struct Material {
 	vec4 diffuseColor;
     float shininess;
 	bool diffuseMode;
-}; 
+};
 
 struct DirectionalLight {
     vec3 direction;
@@ -17,15 +17,14 @@ struct DirectionalLight {
     vec3 specular;
 };
 
-in vec3 FragPos;
-in vec3 Normal;
-in vec2 TexCoords;
-in vec4 FragPosLightSpace;
+in VS_OUT {
+	in vec3 FragPos;
+	in vec3 Normal;
+	in vec2 TexCoords;
+	in vec4 FragPosLightSpace;
+} fs_in;
 
 uniform bool isALight;
-
-uniform mat4 lightView;
-uniform mat4 lightProjection;
 
 uniform sampler2D shadowMap;
 
@@ -38,8 +37,8 @@ float ShadowCalculation(vec4 fragPosLightSpace, DirectionalLight light, vec3 nor
 
 void main()
 {
-    vec3 norm = normalize(Normal);
-    vec3 viewDir = normalize(viewPos - FragPos);
+    vec3 norm = normalize(fs_in.Normal);
+    vec3 viewDir = normalize(viewPos - fs_in.FragPos);
     
 	vec4 result;
 
@@ -65,13 +64,13 @@ vec4 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir)
 
 	vec4 color;
 	if (material.diffuseMode) color = material.diffuseColor;
-	else color = texture(material.diffuse, TexCoords);
+	else color = texture(material.diffuse, fs_in.TexCoords);
 
     vec4 ambient = vec4(light.ambient, 1.0) * color;
 	vec4 diffuse = vec4(light.diffuse, 1.0) * diff * color;
     vec4 specular = vec4(light.specular, 1.0) * spec * color;
 
-	float shadow = ShadowCalculation(FragPosLightSpace, light, normal, lightDir);
+	float shadow = ShadowCalculation(fs_in.FragPosLightSpace, light, normal, lightDir);
 
     return (ambient + (1.0 - shadow) * (diffuse + specular));
 }

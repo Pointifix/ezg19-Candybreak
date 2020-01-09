@@ -140,4 +140,5 @@ void ParticleSystem::draw(glm::mat4& view, glm::mat4& projection)
 	glDrawArrays(GL_POINTS, 0, current_particle_count);
 	glBindVertexArray(0);
 	glUseProgram(0);
+	glEnable(GL_CULL_FACE);
 }

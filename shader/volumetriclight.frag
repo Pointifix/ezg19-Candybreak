@@ -27,7 +27,7 @@ uniform DirectionalLight directionalLight;
 
 uniform vec3 viewPos;
 
-const int NUM_SAMPLES = 128;
+const int NUM_SAMPLES = 256;
 
 float volumetric_lighting_directional(vec3 frag_pos);
 vec3 world_pos_from_depth(float depth);
@@ -35,7 +35,7 @@ vec3 world_pos_from_depth(float depth);
 void main()
 {
 	float depth = texture(depthMap, TexCoords).r;
-
+	
 	vec3 frag_pos = world_pos_from_depth(depth);
 	
 	vec4 outColor = vec4(volumetric_lighting_directional(frag_pos) * directionalLight.diffuse, depth);
@@ -65,18 +65,18 @@ float volumetric_lighting_directional(vec3 frag_pos)
 	float light_contribution = 0.0;
 	for (float l = raymarch_distance_worldspace; l > step_size_worldspace; l -= step_size_worldspace) {
 		vec4 ray_position_lightspace = lightProjection * vec4(ray_position_lightview.xyz, 1);
-		// perform perspective divide            
+		// perform perspective divide
 		vec3 proj_coords = ray_position_lightspace.xyz / ray_position_lightspace.w;
 		
 		// transform to [0,1] range
-		proj_coords = proj_coords * 0.5 + 0.5;		
+		proj_coords = proj_coords * 0.5 + 0.5;
 		
 		// get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
 		vec4 closest_depth = texture(lightDepthMap, proj_coords.xy);
 		
 		float shadow_term = 1.0;
 		
-		if (proj_coords.z - 0.005 > closest_depth.r) {
+		if (proj_coords.z > closest_depth.r) {
 			shadow_term = 0.0;
 		}
 		
@@ -86,13 +86,15 @@ float volumetric_lighting_directional(vec3 frag_pos)
 		float tau =	0.000005;
 		float phi = 800000000.0;
 
-		light_contribution += tau * (shadow_term * (phi * 0.25 * PI_RCP) * d_rcp * d_rcp ) * exp(-d * tau) * exp(-l * tau) * step_size_worldspace;
+		if(shadow_term > 0) light_contribution += 1.0f / NUM_SAMPLES;
+
+		//light_contribution += tau * (shadow_term * (phi * 0.25 * PI_RCP) * d_rcp * d_rcp ) * exp(-d * tau) * exp(-l * tau) * step_size_worldspace;
 	
 		ray_position_lightview += step_size_lightview * delta_lightview;
 		ray_position_worldspace += step_size_worldspace * delta_worldspace;
 	}
 
-	return min(light_contribution, 1.0);
+	return min(max(light_contribution, 0.1), 1.0);
 }
 
 vec3 world_pos_from_depth(float depth)

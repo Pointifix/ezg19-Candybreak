@@ -4,7 +4,7 @@ PhongShader::PhongShader()
 {
 	shader = std::make_unique<Shader>("../shader/phong.vert", "../shader/phong.frag");
 
-	framebuffer = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT, true);
+	framebuffer = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT, false);
 }
 
 PhongShader::~PhongShader()

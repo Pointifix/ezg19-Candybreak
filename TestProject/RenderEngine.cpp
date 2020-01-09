@@ -118,6 +118,7 @@ void RenderEngine::update()
 void RenderEngine::render()
 {
 	// opengl settings, view/projection calculation --------------------------------------------------------------------------------------------------------
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -158,13 +159,13 @@ void RenderEngine::render()
 	}
 
 	// copy msaa rendered scene into normal framebuffer ----------------------------------------------------------------------------------------------------
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, phongResult->FBO);
+	phongResult->bind();
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, phongShader->framebuffer->FBO);
-	glDrawBuffer(GL_BACK);
 	glBlitFramebuffer(0, 0, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, 0, 0, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
 	// volumetric lighting ---------------------------------------------------------------------------------------------------------------------------------
 	volumetricLightShader->perform(view, projection, depthShader->depthmap, phongResult->FBOdepthmap);
+	//combineShader->combine(volumetricLightShader->framebuffer->FBOtexture, volumetricLightShader->blurShader->blurredTexture, 0, 2);
 	combineShader->combine(volumetricLightShader->blurShader->blurredTexture, phongResult->FBOtexture, volumetricLightingResult->FBO, 1);
 
 	// bloom -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -248,6 +249,7 @@ int RenderEngine::init()
 	glCullFace(GL_BACK);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_MULTISAMPLE);
 
 	initSkybox();
 	

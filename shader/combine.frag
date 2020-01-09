@@ -15,7 +15,7 @@ vec4 toneMapping(vec4 color)
 
     vec4 mapped = vec4(1.0) - exp(-color * exposure);
 	mapped = pow(mapped, vec4(1.0 / gamma));
-    return mapped; 
+    return mapped;
 }
 
 void main()
