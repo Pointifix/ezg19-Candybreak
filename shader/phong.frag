@@ -28,6 +28,11 @@ uniform bool isALight;
 
 uniform sampler2D shadowMap;
 
+flat in int instanceID;
+uniform bool isInstanced;
+
+uniform float t;
+
 uniform vec3 viewPos;
 uniform DirectionalLight directionalLight;
 uniform Material material;
@@ -51,8 +56,11 @@ void main()
 		result = CalcDirectionalLight(directionalLight, norm, viewDir);
 		if (result.a > 1.0) result.a = 1.0;
 	}
-
     FragColor = result;
+}
+
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
 vec4 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir)
@@ -63,8 +71,21 @@ vec4 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir)
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
 	vec4 color;
-	if (material.diffuseMode) color = material.diffuseColor;
-	else color = texture(material.diffuse, fs_in.TexCoords);
+
+	if(isInstanced)
+	{
+		float randomNumber = rand(vec2(int(t * 100)));
+		if(int(randomNumber * 5) % 5 == 0) color = vec4(1.0, 0.0, 0.0, 1.0);
+		if(int(randomNumber * 5) % 5 == 1) color = vec4(0.0, 1.0, 0.0, 1.0);
+		if(int(randomNumber * 5) % 5 == 2) color = vec4(0.0, 0.0, 1.0, 1.0);
+		if(int(randomNumber * 5) % 5 == 3) color = vec4(0.0, 1.0, 1.0, 1.0);
+		if(int(randomNumber * 5) % 5 == 4) color = vec4(1.0, 0.0, 1.0, 1.0);
+	}
+	else
+	{
+		if (material.diffuseMode) color = material.diffuseColor;
+		else color = texture(material.diffuse, fs_in.TexCoords);
+	}
 
     vec4 ambient = vec4(light.ambient, 1.0) * color;
 	vec4 diffuse = vec4(light.diffuse, 1.0) * diff * color;
@@ -94,7 +115,8 @@ float ShadowCalculation(vec4 fragPosLightSpace, DirectionalLight light, vec3 nor
 		for(int y = -1; y <= 1; y++)
 		{
 			float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
-			shadow += currentDepth - 0.001 > pcfDepth ? 1.0 : 0.0;        
+			float bias = max(0.0003 * (1.0 - dot(normal, lightDir)), 0.00003);  
+			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
 		}
 	}
 

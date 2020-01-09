@@ -132,8 +132,12 @@ void RenderEngine::render()
 	// depthmap --------------------------------------------------------------------------------------------------------------------------------------------
 	depthShader->use(global::directionalLight->view, global::directionalLight->projection);
 	depthShader->draw(*modelManager->map);
+	breakout::bricksPositionMutex.lock();
+	phongShader->drawInstanced(*modelManager->brick, breakout::bricksPosition.size());
+	breakout::bricksPositionMutex.unlock();
 	depthShader->draw(*modelManager->ball);
 	depthShader->draw(*modelManager->pad);
+
 	depthShader->finish();
 
 	// illumination, skybox and forcefield -----------------------------------------------------------------------------------------------------------------------------
@@ -165,7 +169,6 @@ void RenderEngine::render()
 
 	// volumetric lighting ---------------------------------------------------------------------------------------------------------------------------------
 	volumetricLightShader->perform(view, projection, depthShader->depthmap, phongResult->FBOdepthmap);
-	//combineShader->combine(volumetricLightShader->framebuffer->FBOtexture, volumetricLightShader->blurShader->blurredTexture, 0, 2);
 	combineShader->combine(volumetricLightShader->blurShader->blurredTexture, phongResult->FBOtexture, volumetricLightingResult->FBO, 1);
 
 	// bloom -----------------------------------------------------------------------------------------------------------------------------------------------

@@ -9,8 +9,8 @@
 const float BALL_SIZE = 2.0f; //diameter not radius!
 const float PAD_SIZE = 6.0f; //diameter not radius!
 const float BORDER = 1.0f; //border (black bits) for pad movement boundary
-const float BALL_SPEED = 32.0f;
-const float PAD_SPEED = 32.0f;
+const float BALL_SPEED = 128.0f;
+const float PAD_SPEED = 128.0f;
 
 const float BRICK_SIZEXZ = breakout::BOX_SIZE / breakout::BREAKOUT_SIZE;
 const float BRICK_SIZEY = breakout::BOX_SIZE / (breakout::BREAKOUT_SIZE * 2.0f);
@@ -90,7 +90,7 @@ void Breakout::boundaryCheck()
 			breakout::hitQueuesMutex.unlock();
 
 			global::particleSystemsToAddMutex.lock();
-			if (i < 5) global::particleSystemsToAdd.push_back({this->ballPosition, 16, glm::vec3(3.0, 3.0, 3.0)});
+			if (i < 5) global::particleSystemsToAdd.push_back({this->ballPosition, 32, glm::vec3(3.0, 3.0, 3.0)});
 			global::particleSystemsToAddMutex.unlock();
 		}
 	}
@@ -151,7 +151,9 @@ void Breakout::destroyBrick(glm::ivec3 indices)
 	breakout::bricksToRemoveMutex.unlock();
 	breakout::updateBricks = true;
 
-	//particleSystems.push_back(std::make_unique<ParticleSystem>(brickPosition, 256, glm::vec3(0.0, 1.0, 0.0)));
+	global::particleSystemsToAddMutex.lock();
+	global::particleSystemsToAdd.push_back({ this->ballPosition, 256, glm::vec3(0.0, 0.0, 3.0) });
+	global::particleSystemsToAddMutex.unlock();
 }
 
 void Breakout::padCheck()

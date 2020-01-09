@@ -49,7 +49,7 @@ void VolumetricLightShader::perform(glm::mat4 view, glm::mat4 projection, GLuint
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
-	blurShader->blur(this->framebuffer->FBOtexture, 1);
+	blurShader->blur(this->framebuffer->FBOtexture, 2);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glViewport(0, 0, setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT);

@@ -23,5 +23,5 @@ void main()
 	}
 
 	vec4 color = texture(aTexture, TexCoords);
-	FragColor = vec4(color.rgb + (alphaMultiplier * vec3(0.0, 0.0, 20.0)), alphaMultiplier * color.a);
+	FragColor = vec4(color.rgb + (alphaMultiplier * vec3(0.0, 7.0, 20.0)), alphaMultiplier * color.a);
 }

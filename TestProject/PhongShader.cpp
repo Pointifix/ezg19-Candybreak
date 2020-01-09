@@ -4,7 +4,7 @@ PhongShader::PhongShader()
 {
 	shader = std::make_unique<Shader>("../shader/phong.vert", "../shader/phong.frag");
 
-	framebuffer = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT, false);
+	framebuffer = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT, true);
 }
 
 PhongShader::~PhongShader()
@@ -20,7 +20,7 @@ void PhongShader::use(glm::mat4 view, glm::mat4 projection, GLuint depthmap)
 	shader->setInt("material.diffuse", 0);
 	shader->setInt("material.specular", 1);
 
-	shader->setFloat("material.shininess", 32.0f);
+	shader->setFloat("material.shininess", 4.0f);
 
 	shader->setVec3("directionalLight.direction", global::directionalLight->direction);
 	shader->setVec3("directionalLight.ambient", global::directionalLight->ambient);
@@ -44,6 +44,7 @@ void PhongShader::draw(Model model, bool light)
 {
 	shader->setMat4("model", model.model);
 	shader->setBool("isALight", light);
+	shader->setBool("isInstanced", false);
 	
 	for (size_t i = 0; i < model.meshes.size(); i++)
 	{
@@ -86,6 +87,8 @@ void PhongShader::drawInstanced(Model model, int size)
 {
 	shader->setMat4("model", model.model);
 	shader->setBool("isALight", false);
+	shader->setBool("isInstanced", true);
+	shader->setFloat("t", global::t);
 
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;

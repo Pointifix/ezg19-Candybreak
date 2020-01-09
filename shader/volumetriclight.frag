@@ -79,17 +79,9 @@ float volumetric_lighting_directional(vec3 frag_pos)
 		if (proj_coords.z > closest_depth.r) {
 			shadow_term = 0.0;
 		}
-		
-		float d = length(ray_position_worldspace.xyz - directionalLight.position);
-		float d_rcp = 1.0/d;
-		
-		float tau =	0.000005;
-		float phi = 800000000.0;
 
 		if(shadow_term > 0) light_contribution += 1.0f / NUM_SAMPLES;
 
-		//light_contribution += tau * (shadow_term * (phi * 0.25 * PI_RCP) * d_rcp * d_rcp ) * exp(-d * tau) * exp(-l * tau) * step_size_worldspace;
-	
 		ray_position_lightview += step_size_lightview * delta_lightview;
 		ray_position_worldspace += step_size_worldspace * delta_worldspace;
 	}

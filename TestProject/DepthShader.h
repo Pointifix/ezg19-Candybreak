@@ -14,6 +14,7 @@ public:
 
 	void use(glm::mat4 view, glm::mat4 projection);
 	void draw(Model model);
+	void drawInstanced(Model model, int size);
 	void finish();
 private:
 	std::unique_ptr<Shader> shader;

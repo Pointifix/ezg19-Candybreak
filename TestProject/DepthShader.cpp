@@ -67,6 +67,16 @@ void DepthShader::draw(Model model)
 	}
 }
 
+void DepthShader::drawInstanced(Model model, int size)
+{
+	shader->setMat4("model", model.model);
+
+	glBindVertexArray(model.meshes[0].VAO);
+	glDrawElementsInstanced(GL_TRIANGLES, model.meshes[0].indices.size(), GL_UNSIGNED_INT, 0, size);
+	glBindVertexArray(0);
+}
+
+
 
 void DepthShader::finish()
 {
