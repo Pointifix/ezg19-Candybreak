@@ -38,7 +38,7 @@ void ForcefieldShader::drawForcefield(glm::mat4& view, glm::mat4& projection)
 		forcefieldShader->setInt("hitCount", 0);
 		if (size > 0) {
 
-			if (global::currentFrameLogicEngine - hitQueue->front().z > 3.0f)
+			if (global::currentFrameLogicEngine - hitQueue->front().z > 1.0f)
 			{
 				hitQueue->pop();
 				size--;

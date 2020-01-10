@@ -88,7 +88,7 @@ void RenderEngine::update()
 
 	// update light position -------------------------------------------------------------------------------------------------------------------------------
 
-	global::directionalLight->direction = glm::rotateX(glm::vec3(0.0f, 0.0f, 0.5f), glm::radians(90.0f * (float)global::t));
+	global::directionalLight->direction = glm::rotateX(glm::vec3(0.0f, 0.0f, 0.5f), glm::radians(666.6f * (float)global::t));
 	global::directionalLight->position = global::directionalLight->direction * (-1000.0f);
 	global::directionalLight->view = glm::lookAt(global::directionalLight->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 

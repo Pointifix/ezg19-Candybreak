@@ -8,7 +8,7 @@ uniform float t;
 uniform samplerCube skybox1;
 uniform samplerCube skybox2;
 
-const float startT = 0.15;
+const float startT = 0.20;
 const float endT = 0.27;
 
 void main()

@@ -17,7 +17,7 @@ void main()
 	for(int i = 0; i < hitCount; i++)
 	{
 		float distance = distance(TexCoords, hitCoords[i].xy);
-		float falloff = (0.2 - distance) * 5;
+		float falloff = (0.2 - distance) * 10;
 		float tempMultiplier = pow(2, -(pow(distance - (hitCoords[i].z / 3.0), 2) * 4096)) * falloff;
 		if(falloff > 0 && tempMultiplier > alphaMultiplier) alphaMultiplier = tempMultiplier;
 	}

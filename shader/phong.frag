@@ -105,7 +105,7 @@ vec4 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir)
 		blockIndices.y = int((fs_in.FragPos.y - 25) / 2.5) % 10;
 		blockIndices.z = int((fs_in.FragPos.z - 25) / 5) % 10;
 
-		float randomNumber = rand(vec2(int(t * 200) + blockIndices.x + 10 * blockIndices.y + 100 * blockIndices.z));
+		float randomNumber = rand(vec2(int(t * 2000) + blockIndices.x + 10 * blockIndices.y + 100 * blockIndices.z));
 
 		const vec4 colorarray[14] = {
 			vec4(0.0, 0.0, 1.0, 1.0),

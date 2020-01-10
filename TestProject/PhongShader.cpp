@@ -28,7 +28,7 @@ void PhongShader::use(glm::mat4 view, glm::mat4 projection, GLuint depthmap)
 	shader->setVec3("directionalLight.specular", global::directionalLight->specular);
 
 	shader->setVec3("spotLights[0].position", glm::vec3(0.0f, 25.0f, 25.0f));
-	shader->setVec3("spotLights[0].direction", glm::vec3(0.0f, -1.0f, 1.0f));
+	shader->setVec3("spotLights[0].direction", glm::vec3(0.0f, -1.0f, 0.7f));
 	shader->setVec3("spotLights[0].ambient", 0.0f, 0.0f, 0.0f);
 	shader->setVec3("spotLights[0].diffuse", 1.0f, 0.0f, 0.0f);
 	shader->setVec3("spotLights[0].specular", 2.0f, 0.0f, 0.0f);
