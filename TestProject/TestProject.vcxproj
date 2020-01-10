@@ -185,6 +185,7 @@
     <ClInclude Include="RenderEngine.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="VolumentricLightShader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +214,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Candybreak.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="VolumentricLightShader.cpp" />
   </ItemGroup>
   <ItemGroup>

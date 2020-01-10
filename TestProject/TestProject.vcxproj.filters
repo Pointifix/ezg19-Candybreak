@@ -123,6 +123,9 @@
     <ClInclude Include="ForcefieldShader.h">
       <Filter>Headerdateien\Render\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>Headerdateien\Render\Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -202,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="ForcefieldShader.cpp">
       <Filter>Quelldateien\Render\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>Quelldateien\Render\Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
