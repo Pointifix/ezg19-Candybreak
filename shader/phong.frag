@@ -50,7 +50,7 @@ uniform float t;
 uniform vec3 viewPos;
 uniform Material material;
 
-#define NR_SPOTLIGHTS 1
+#define NR_SPOTLIGHTS 4
 
 uniform DirectionalLight directionalLight;
 uniform SpotLight spotLights[NR_SPOTLIGHTS];

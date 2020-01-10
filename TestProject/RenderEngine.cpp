@@ -240,19 +240,7 @@ int RenderEngine::init()
 	else
 		::ShowWindow(::GetConsoleWindow(), SW_HIDE);
 
-	// enable or disable music
-	global::SoundEngine = createIrrKlangDevice();
-
-	if (!setting::MUSIC)
-		global::SoundEngine->setSoundVolume(0.0f);
-
-	global::candylandSong = global::SoundEngine->play2D("../assets/Candyland-Tobu.mp3", false, false, ESM_NO_STREAMING);
-
-	songLength = global::candylandSong->getPlayLength() / 1000.0f;
-
-	startTime = glfwGetTime();
-	lastFrame = startTime;
-
+	// opengl settings
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -262,6 +250,7 @@ int RenderEngine::init()
 
 	initSkybox();
 	
+	// light initialization
 	global::directionalLight = std::make_unique<DirectionalLight>();
 	global::directionalLight->direction = glm::vec3(0.0f, 0.0f, 0.5f);
 	global::directionalLight->position = global::directionalLight->direction * (-1000.0f);
@@ -272,6 +261,12 @@ int RenderEngine::init()
 	global::directionalLight->projection = glm::ortho(-200.0f, 200.0f, -200.0f, 200.0f, 0.1f, 10000.0f);
 	global::directionalLight->view = glm::lookAt(global::directionalLight->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
+	global::spotLights[0] = std::make_unique<SpotLight>(glm::vec3(25, 25, 0), glm::vec3(1, -1, 0), 5.0f, 30.0f, 0.2, 0.00001, 0.00001, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	global::spotLights[1] = std::make_unique<SpotLight>(glm::vec3(-25, 25, 0), glm::vec3(-1, -1, 0), 5.0f, 30.0f, 0.2, 0.00001, 0.00001, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	global::spotLights[2] = std::make_unique<SpotLight>(glm::vec3(0, 25, 25), glm::vec3(0, -1, 1), 5.0f, 30.0f, 0.2, 0.00001, 0.00001, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	global::spotLights[3] = std::make_unique<SpotLight>(glm::vec3(0, 25, -25), glm::vec3(0, -1, -1), 5.0f, 30.0f, 0.2, 0.00001, 0.00001, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+
+	// load shader, model and create framebuffers
 	forcefieldShader = std::make_unique<ForcefieldShader>();
 	combineShader = std::make_unique<CombineShader>();
 	bloomShader = std::make_unique<BloomShader>();
@@ -284,6 +279,19 @@ int RenderEngine::init()
 	phongResult = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT);
 	bloomResult = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT);
 	volumetricLightingResult = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT);
+
+	// enable or disable music
+	global::SoundEngine = createIrrKlangDevice();
+
+	if (!setting::MUSIC)
+		global::SoundEngine->setSoundVolume(0.0f);
+
+	global::candylandSong = global::SoundEngine->play2D("../assets/Candyland-Tobu.mp3", false, false, ESM_NO_STREAMING);
+
+	songLength = global::candylandSong->getPlayLength() / 1000.0f;
+
+	startTime = glfwGetTime();
+	lastFrame = startTime;
 
 	// return 0 if everything is fine
 	return 0;

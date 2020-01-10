@@ -10,6 +10,7 @@ namespace global
 	std::unique_ptr<Camera> camera;
 
 	std::unique_ptr<DirectionalLight> directionalLight;
+	std::unique_ptr<SpotLight> spotLights[4];
 
 	GLuint screenQuadVAO;
 
