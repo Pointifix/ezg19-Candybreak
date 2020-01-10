@@ -9,6 +9,7 @@
 #include <irrKlang/irrKlang.h>
 #include "Camera.h"
 #include "DirectionalLight.h"
+#include "SpotLight.h"
 
 using namespace irrklang;
 
@@ -34,6 +35,7 @@ namespace global
 	extern std::unique_ptr<Camera> camera;
 
 	extern std::unique_ptr<DirectionalLight> directionalLight;
+	extern std::unique_ptr<SpotLight> spotLights[4];
 
 	extern GLuint screenQuadVAO;
 

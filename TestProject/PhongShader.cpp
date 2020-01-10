@@ -27,16 +27,20 @@ void PhongShader::use(glm::mat4 view, glm::mat4 projection, GLuint depthmap)
 	shader->setVec3("directionalLight.diffuse", global::directionalLight->diffuse);
 	shader->setVec3("directionalLight.specular", global::directionalLight->specular);
 
-	shader->setVec3("spotLights[0].position", glm::vec3(0.0f, 25.0f, 25.0f));
-	shader->setVec3("spotLights[0].direction", glm::vec3(0.0f, -1.0f, 0.7f));
-	shader->setVec3("spotLights[0].ambient", 0.0f, 0.0f, 0.0f);
-	shader->setVec3("spotLights[0].diffuse", 1.0f, 0.0f, 0.0f);
-	shader->setVec3("spotLights[0].specular", 2.0f, 0.0f, 0.0f);
-	shader->setFloat("spotLights[0].constant", 0.2f);
-	shader->setFloat("spotLights[0].linear", 0.00001);
-	shader->setFloat("spotLights[0].quadratic", 0.00001);
-	shader->setFloat("spotLights[0].cutOff", glm::cos(glm::radians(5.0f)));
-	shader->setFloat("spotLights[0].outerCutOff", glm::cos(glm::radians(30.0f)));
+	for (int i = 0; i < 4; i++)
+	{
+		std::string index = std::to_string(i);
+		shader->setVec3("spotLights[" + index + "].position", global::spotLights[i]->position);
+		shader->setVec3("spotLights[" + index + "].direction", global::spotLights[i]->direction);
+		shader->setVec3("spotLights[" + index + "].ambient", global::spotLights[i]->ambient);
+		shader->setVec3("spotLights[" + index + "].diffuse", global::spotLights[i]->diffuse);
+		shader->setVec3("spotLights[" + index + "].specular", global::spotLights[i]->specular);
+		shader->setFloat("spotLights[" + index + "].constant", global::spotLights[i]->constant);
+		shader->setFloat("spotLights[" + index + "].linear", global::spotLights[i]->linear);
+		shader->setFloat("spotLights[" + index + "].quadratic", global::spotLights[i]->quadratic);
+		shader->setFloat("spotLights[" + index + "].cutOff", glm::cos(glm::radians(global::spotLights[i]->cutOff)));
+		shader->setFloat("spotLights[" + index + "].outerCutOff", glm::cos(glm::radians(global::spotLights[i]->outerCutOff)));
+	}
 
 	shader->setVec3("viewPos", global::camera->position);
 
