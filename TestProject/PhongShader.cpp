@@ -20,7 +20,7 @@ void PhongShader::use(glm::mat4 view, glm::mat4 projection, GLuint depthmap)
 	shader->setInt("material.diffuse", 0);
 	shader->setInt("material.specular", 1);
 
-	shader->setFloat("material.shininess", 4.0f);
+	shader->setFloat("material.shininess", 16.0f);
 
 	shader->setVec3("directionalLight.direction", global::directionalLight->direction);
 	shader->setVec3("directionalLight.ambient", global::directionalLight->ambient);

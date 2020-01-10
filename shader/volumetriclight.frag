@@ -27,7 +27,7 @@ uniform DirectionalLight directionalLight;
 
 uniform vec3 viewPos;
 
-const int NUM_SAMPLES = 256;
+const int NUM_SAMPLES = 128;
 
 float volumetric_lighting_directional(vec3 frag_pos);
 vec3 world_pos_from_depth(float depth);

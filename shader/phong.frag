@@ -74,12 +74,27 @@ vec4 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir)
 
 	if(isInstanced)
 	{
-		float randomNumber = rand(vec2(int(t * 100)));
-		if(int(randomNumber * 5) % 5 == 0) color = vec4(1.0, 0.0, 0.0, 1.0);
-		if(int(randomNumber * 5) % 5 == 1) color = vec4(0.0, 1.0, 0.0, 1.0);
-		if(int(randomNumber * 5) % 5 == 2) color = vec4(0.0, 0.0, 1.0, 1.0);
-		if(int(randomNumber * 5) % 5 == 3) color = vec4(0.0, 1.0, 1.0, 1.0);
-		if(int(randomNumber * 5) % 5 == 4) color = vec4(1.0, 0.0, 1.0, 1.0);
+		ivec3 blockIndices = ivec3((fs_in.FragPos) / 5.0) % 10;
+
+		float randomNumber = rand(vec2(int(t * 200) + blockIndices.x + 10 * blockIndices.y + 100 * blockIndices.z));
+
+		const vec4 colorarray[14] = {
+			vec4(0.0, 0.0, 1.0, 1.0),
+			vec4(0.0, 1.0, 0.0, 1.0),
+			vec4(0.0, 1.0, 1.0, 1.0),
+			vec4(1.0, 0.0, 0.0, 1.0),
+			vec4(1.0, 0.0, 1.0, 1.0),
+			vec4(1.0, 1.0, 0.0, 1.0),
+			vec4(1.0, 0.0, 1.0, 1.0),
+			vec4(0.0, 0.0, 50.0, 1.0),
+			vec4(0.0, 50.0, 0.0, 1.0),
+			vec4(0.0, 50.0, 50.0, 1.0),
+			vec4(50.0, 0.0, 0.0, 1.0),
+			vec4(50.0, 0.0, 50.0, 1.0),
+			vec4(50.0, 1.0, 0.0, 1.0),
+			vec4(50.0, 0.0, 50.0, 1.0)
+		};
+		color = colorarray[int(randomNumber * 14) % 14];
 	}
 	else
 	{

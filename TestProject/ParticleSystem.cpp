@@ -40,8 +40,8 @@ ParticleSystem::ParticleSystem(glm::vec3 position, int particleCount, glm::vec3 
 	std::vector<glm::vec4> positions;
 	std::vector<glm::vec4> velocities;
 
-	float maxSpeed = 30.0f;
-	float maxTTL = 2.0f;
+	float maxSpeed = 40.0f;
+	float maxTTL = 1.2f;
 
 	for (int i = 0; i < this->particle_count; i++) {
 		positions.push_back(glm::vec4(position, static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * maxTTL));

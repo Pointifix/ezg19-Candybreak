@@ -86,6 +86,12 @@ void RenderEngine::update()
 	processInput();
 	global::camera->update();
 
+	// update light position -------------------------------------------------------------------------------------------------------------------------------
+
+	global::directionalLight->direction = glm::rotateX(glm::vec3(0.0f, 0.0f, 0.5f), glm::radians(90.0f * (float)global::t));
+	global::directionalLight->position = global::directionalLight->direction * (-1000.0f);
+	global::directionalLight->view = glm::lookAt(global::directionalLight->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
 	// update breakout -------------------------------------------------------------------------------------------------------------------------------------
 	modelManager->ball->model = glm::translate(glm::mat4(1.0f), glm::vec3(breakout::ballPosition));
 	modelManager->pad->model = glm::translate(glm::mat4(1.0f), glm::vec3(breakout::padPosition));
@@ -146,7 +152,7 @@ void RenderEngine::render()
 	phongShader->draw(*modelManager->ball);
 	phongShader->draw(*modelManager->pad);
 
-	phongShader->draw(*modelManager->light, true);
+	//phongShader->draw(*modelManager->light, true);
 
 	breakout::bricksPositionMutex.lock();
 	phongShader->drawInstanced(*modelManager->brick, breakout::bricksPosition.size());
@@ -257,7 +263,7 @@ int RenderEngine::init()
 	initSkybox();
 	
 	global::directionalLight = std::make_unique<DirectionalLight>();
-	global::directionalLight->direction = glm::vec3(0.5f, -0.5f, -0.5f);
+	global::directionalLight->direction = glm::vec3(0.0f, 0.0f, 0.5f);
 	global::directionalLight->position = global::directionalLight->direction * (-1000.0f);
 	global::directionalLight->ambient = glm::vec3(0.2f, 0.2f, 0.2f);
 	global::directionalLight->diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
