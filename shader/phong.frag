@@ -3,7 +3,6 @@ out vec4 FragColor;
 
 struct Material {
     sampler2D diffuse;
-    sampler2D specular;
 	vec4 diffuseColor;
     float shininess;
 	bool diffuseMode;
@@ -12,6 +11,21 @@ struct Material {
 struct DirectionalLight {
     vec3 direction;
 	
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
+struct SpotLight {
+    vec3 position;
+    vec3 direction;
+    float cutOff;
+    float outerCutOff;
+  
+    float constant;
+    float linear;
+    float quadratic;
+  
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -34,10 +48,16 @@ uniform bool isInstanced;
 uniform float t;
 
 uniform vec3 viewPos;
-uniform DirectionalLight directionalLight;
 uniform Material material;
 
+#define NR_SPOTLIGHTS 1
+
+uniform DirectionalLight directionalLight;
+uniform SpotLight spotLights[NR_SPOTLIGHTS];
+
 vec4 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir);
+vec4 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
+
 float ShadowCalculation(vec4 fragPosLightSpace, DirectionalLight light, vec3 normal, vec3 lightDir);
 
 void main()
@@ -53,7 +73,13 @@ void main()
 	}
 	else
 	{
-		result = CalcDirectionalLight(directionalLight, norm, viewDir);
+		result += CalcDirectionalLight(directionalLight, norm, viewDir);
+
+		for(int i = 0; i < NR_SPOTLIGHTS; i++)
+		{
+			result += CalcSpotLight(spotLights[i], norm, fs_in.FragPos, viewDir);
+		}
+
 		if (result.a > 1.0) result.a = 1.0;
 	}
     FragColor = result;
@@ -74,7 +100,10 @@ vec4 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir)
 
 	if(isInstanced)
 	{
-		ivec3 blockIndices = ivec3((fs_in.FragPos) / 5.0) % 10;
+		ivec3 blockIndices;
+		blockIndices.x = int((fs_in.FragPos.x - 25) / 5) % 10;
+		blockIndices.y = int((fs_in.FragPos.y - 25) / 2.5) % 10;
+		blockIndices.z = int((fs_in.FragPos.z - 25) / 5) % 10;
 
 		float randomNumber = rand(vec2(int(t * 200) + blockIndices.x + 10 * blockIndices.y + 100 * blockIndices.z));
 
@@ -94,7 +123,7 @@ vec4 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir)
 			vec4(50.0, 1.0, 0.0, 1.0),
 			vec4(50.0, 0.0, 50.0, 1.0)
 		};
-		color = colorarray[int(randomNumber * 14) % 14];
+		color = colorarray[int(randomNumber * 7 + 7) % 14];
 	}
 	else
 	{
@@ -109,6 +138,35 @@ vec4 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir)
 	float shadow = ShadowCalculation(fs_in.FragPosLightSpace, light, normal, lightDir);
 
     return (ambient + (1.0 - shadow) * (diffuse + specular));
+}
+
+vec4 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+{
+    vec3 lightDir = normalize(light.position - fragPos);
+    // diffuse shading
+    float diff = max(dot(normal, lightDir), 0.0);
+    // specular shading
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    // attenuation
+    float distance = length(light.position - fragPos);
+    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
+    // spotlight intensity
+    float theta = dot(lightDir, normalize(-light.direction)); 
+    float epsilon = light.cutOff - light.outerCutOff;
+    float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
+    // combine results
+	vec4 color;
+	if (material.diffuseMode) color = material.diffuseColor;
+	else color = texture(material.diffuse, fs_in.TexCoords);
+
+    vec3 ambient = light.ambient * vec3(color);
+    vec3 diffuse = light.diffuse * diff * vec3(color);
+    vec3 specular = light.specular * spec * vec3(color);
+    ambient *= attenuation * intensity;
+    diffuse *= attenuation * intensity;
+    specular *= attenuation * intensity;
+    return vec4((ambient + diffuse + specular), 1.0);
 }
 
 float ShadowCalculation(vec4 fragPosLightSpace, DirectionalLight light, vec3 normal, vec3 lightDir)
