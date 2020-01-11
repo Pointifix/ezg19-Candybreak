@@ -6,6 +6,7 @@ SpotLight::SpotLight(glm::vec3 position, glm::vec3 direction, float cutOff, floa
 {
 	this->position = position;
 	this->direction = direction;
+	this->startDirection = direction;
 	
 	this->cutOff = cutOff;
 	this->outerCutOff = outerCutoff;

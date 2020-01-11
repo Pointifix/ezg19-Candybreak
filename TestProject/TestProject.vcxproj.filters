@@ -126,6 +126,9 @@
     <ClInclude Include="SpotLight.h">
       <Filter>Headerdateien\Render\Light</Filter>
     </ClInclude>
+    <ClInclude Include="VoidShader.h">
+      <Filter>Headerdateien\Render\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -209,6 +212,9 @@
     <ClCompile Include="SpotLight.cpp">
       <Filter>Quelldateien\Render\Light</Filter>
     </ClCompile>
+    <ClCompile Include="VoidShader.cpp">
+      <Filter>Quelldateien\Render\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\shader\skybox.frag">
@@ -269,6 +275,12 @@
       <Filter>Ressourcendateien</Filter>
     </None>
     <None Include="..\shader\forcefield.vert">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\void.frag">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\shader\void.vert">
       <Filter>Ressourcendateien</Filter>
     </None>
   </ItemGroup>

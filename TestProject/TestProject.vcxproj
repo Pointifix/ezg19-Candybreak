@@ -186,6 +186,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="SpotLight.h" />
+    <ClInclude Include="VoidShader.h" />
     <ClInclude Include="VolumentricLightShader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -215,6 +216,7 @@
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Candybreak.cpp" />
     <ClCompile Include="SpotLight.cpp" />
+    <ClCompile Include="VoidShader.cpp" />
     <ClCompile Include="VolumentricLightShader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -236,6 +238,8 @@
     <None Include="..\shader\phong.vert" />
     <None Include="..\shader\skybox.frag" />
     <None Include="..\shader\skybox.vert" />
+    <None Include="..\shader\void.frag" />
+    <None Include="..\shader\void.vert" />
     <None Include="..\shader\volumetriclight.frag" />
     <None Include="..\shader\volumetriclight.vert" />
   </ItemGroup>

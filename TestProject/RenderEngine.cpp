@@ -16,6 +16,7 @@
 #include "AutomaticCamera.h"
 #include "InputHandler.h"
 
+#include "VoidShader.h"
 #include "ForcefieldShader.h"
 #include "CombineShader.h"
 #include "BloomShader.h"
@@ -29,6 +30,7 @@
 #include "FrameBuffer.h"
 #include "ParticleSystem.h"
 
+std::unique_ptr<VoidShader> voidShader;
 std::unique_ptr<ForcefieldShader> forcefieldShader;
 std::unique_ptr<CombineShader> combineShader;
 std::unique_ptr<BloomShader> bloomShader;
@@ -62,7 +64,7 @@ void RenderEngine::run(std::promise<int> && error)
 		return;
 	}
 
-	while (!global::windowShouldClose)
+	while (!global::windowShouldClose && global::t < 1.0)
 	{
 		update();
 		render();
@@ -91,6 +93,11 @@ void RenderEngine::update()
 	global::directionalLight->direction = glm::rotateX(glm::vec3(0.0f, 0.0f, 0.5f), glm::radians(666.6f * (float)global::t));
 	global::directionalLight->position = global::directionalLight->direction * (-1000.0f);
 	global::directionalLight->view = glm::lookAt(global::directionalLight->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+	for (int i = 0; i < 4; i++)
+	{
+		global::spotLights[i]->direction = global::spotLights[i]->startDirection * glm::vec3(cos(glm::radians((float)global::t * 360 * 50)) * 0.5 + 0.7, 1.0, cos(glm::radians((float)global::t * 360 * 50)) * 0.5 + 0.7);
+	}
 
 	// update breakout -------------------------------------------------------------------------------------------------------------------------------------
 	modelManager->ball->model = glm::translate(glm::mat4(1.0f), glm::vec3(breakout::ballPosition));
@@ -149,10 +156,8 @@ void RenderEngine::render()
 	// illumination, skybox and forcefield -----------------------------------------------------------------------------------------------------------------------------
 	phongShader->use(view, projection, depthShader->depthmap);
 	phongShader->draw(*modelManager->map);
-	phongShader->draw(*modelManager->ball);
+	phongShader->draw(*modelManager->ball, true);
 	phongShader->draw(*modelManager->pad);
-
-	//phongShader->draw(*modelManager->light, true);
 
 	breakout::bricksPositionMutex.lock();
 	phongShader->drawInstanced(*modelManager->brick, breakout::bricksPosition.size());
@@ -161,6 +166,7 @@ void RenderEngine::render()
 	drawSkybox(view, projection);
 
 	forcefieldShader->drawForcefield(view, projection);
+	voidShader->draw(view, projection);
 
 	// particle systems ------------------------------------------------------------------------------------------------------------------------------------
 	for (int i = 0; i < particleSystems.size(); i++)
@@ -267,6 +273,7 @@ int RenderEngine::init()
 	global::spotLights[3] = std::make_unique<SpotLight>(glm::vec3(0, 25, -25), glm::vec3(0, -1, -1), 5.0f, 30.0f, 0.2, 0.00001, 0.00001, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	// load shader, model and create framebuffers
+	voidShader = std::make_unique<VoidShader>();
 	forcefieldShader = std::make_unique<ForcefieldShader>();
 	combineShader = std::make_unique<CombineShader>();
 	bloomShader = std::make_unique<BloomShader>();

@@ -28,7 +28,7 @@ void LogicEngine::run()
 {
 	lastFrame = glfwGetTime();
 
-	while (!global::windowShouldClose)
+	while (!global::windowShouldClose && global::t < 1.0)
 	{
 		currentFrame = glfwGetTime();
 		global::deltaTimeLogicEngine = currentFrame - lastFrame;
