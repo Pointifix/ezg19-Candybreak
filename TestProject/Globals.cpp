@@ -23,6 +23,8 @@ namespace global
 
 	std::mutex particleSystemsToAddMutex;
 	std::vector<particleSystem> particleSystemsToAdd;
+
+	float currentTransitionGrayness;
 }
 
 namespace breakout

@@ -11,6 +11,12 @@ struct ControlPoint {
 	float t;
 };
 
+struct TransitionPoint {
+	float startTime;
+	float endTime;
+	bool fadeIn;
+};
+
 // VERY IMPORTANT
 // the t value describes the time length of a segment
 std::vector<std::vector<ControlPoint>> curves {
@@ -53,6 +59,16 @@ std::vector<std::vector<ControlPoint>> curves {
 	}
 };
 
+// black fade in/out transitions (only in mode 2)
+// start values, end values must be in order!
+// start time, end time, fade in/out
+std::vector<TransitionPoint> transitions = {
+	{ 0.00, 0.01, true },
+	{ 0.99, 1.0, false }
+};
+
+TransitionPoint currentTransitionPoint;
+int currentTransitionPointIndex;
 std::array<ControlPoint, 4> currentControlPoints;
 
 std::array<int, 2> currentIndices;
@@ -61,6 +77,9 @@ glm::vec3 previousRotation;
 
 AutomaticCamera::AutomaticCamera()
 {
+	currentTransitionPoint = transitions[0];
+	currentTransitionPointIndex = 0;
+
 	float currentT = 0.0f;
 	float temp;
 	for (auto & curve : curves)
@@ -104,6 +123,25 @@ AutomaticCamera::~AutomaticCamera()
 
 void AutomaticCamera::update()
 {
+	if (currentTransitionPointIndex < transitions.size() && global::t > currentTransitionPoint.endTime)
+	{
+		currentTransitionPointIndex++;
+		if (currentTransitionPointIndex < transitions.size())
+		{
+			currentTransitionPoint = transitions[currentTransitionPointIndex];
+		}
+	}
+
+	if (global::t >= currentTransitionPoint.startTime && global::t <= currentTransitionPoint.endTime)
+	{
+		global::currentTransitionGrayness = (global::t - currentTransitionPoint.startTime) / (currentTransitionPoint.endTime - currentTransitionPoint.startTime);
+		if (currentTransitionPoint.fadeIn) global::currentTransitionGrayness = 1.0 - global::currentTransitionGrayness;
+	}
+	else
+	{
+		global::currentTransitionGrayness = 0.0;
+	}
+
 	if (global::t > currentControlPoints[2].t)
 	{
 		if (currentIndices[1] + 4 > curves[currentIndices[0]].size() - 1)

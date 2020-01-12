@@ -16,6 +16,7 @@ void CombineShader::combine(GLuint texture1, GLuint texture2, GLuint framebuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
 	shader->setInt("mode", mode);
+	shader->setFloat("currentTransitionGrayness", global::currentTransitionGrayness);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture1);

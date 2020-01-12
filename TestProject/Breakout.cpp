@@ -9,8 +9,8 @@
 const float BALL_SIZE = 2.0f; //diameter not radius!
 const float PAD_SIZE = 6.0f; //diameter not radius!
 const float BORDER = 1.0f; //border (black bits) for pad movement boundary
-const float BALL_SPEED = 2.0f;
-const float PAD_SPEED = 2.0f;
+const float BALL_SPEED = 32.0f;
+const float PAD_SPEED = 32.0f;
 
 const float BRICK_SIZEXZ = breakout::BOX_SIZE / breakout::BREAKOUT_SIZE;
 const float BRICK_SIZEY = breakout::BOX_SIZE / (breakout::BREAKOUT_SIZE * 2.0f);

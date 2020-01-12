@@ -55,6 +55,8 @@ namespace global
 		glm::vec3 color;
 	};
 	extern std::vector<particleSystem> particleSystemsToAdd;
+
+	extern float currentTransitionGrayness;
 }
 
 namespace breakout

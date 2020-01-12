@@ -287,6 +287,11 @@ int RenderEngine::init()
 	bloomResult = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT);
 	volumetricLightingResult = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT);
 
+	particleSystems.push_back(std::make_unique<ParticleSystem>(glm::vec3(25.0 + 6.0, -25.0, 25.0 + 6.0), 1024, glm::vec3(3.0, 3.0, 3.0), 1, glm::vec3(5.0, 35.0, 5.0)));
+	particleSystems.push_back(std::make_unique<ParticleSystem>(glm::vec3(-25.0 - 6.0, -25.0, 25.0 + 6.0), 1024, glm::vec3(3.0, 3.0, 3.0), 1, glm::vec3(-5.0, 35.0, 5.0)));
+	particleSystems.push_back(std::make_unique<ParticleSystem>(glm::vec3(25.0 + 6.0, -25.0, -25.0 - 6.0), 1024, glm::vec3(3.0, 3.0, 3.0), 1, glm::vec3(5.0, 35.0, -5.0)));
+	particleSystems.push_back(std::make_unique<ParticleSystem>(glm::vec3(-25.0 - 6.0, -25.0, -25.0 - 6.0), 1024, glm::vec3(3.0, 3.0, 3.0), 1, glm::vec3(-5.0, 35.0, -5.0)));
+
 	// enable or disable music
 	global::SoundEngine = createIrrKlangDevice();
 

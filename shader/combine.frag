@@ -8,6 +8,8 @@ uniform sampler2D texture2;
 
 uniform int mode;
 
+uniform float currentTransitionGrayness;
+
 vec4 toneMapping(vec4 color)
 {
 	const float gamma = 2.2;
@@ -29,7 +31,7 @@ void main()
 			FragColor = texture(texture1, TexCoords) * texture(texture2, TexCoords);
 			break;
 		case 2:
-			FragColor = toneMapping(texture(texture1, TexCoords) + texture(texture2, TexCoords));
+			FragColor = toneMapping(texture(texture1, TexCoords) + texture(texture2, TexCoords)) * (1.0 - currentTransitionGrayness);
 			break;
 	}
 }

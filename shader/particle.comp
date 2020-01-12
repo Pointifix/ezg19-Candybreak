@@ -12,23 +12,34 @@ layout(std430, binding = 1) buffer Vel1
 	vec4 Velocity_In[];
 };
 
-layout(std430, binding = 2) buffer Pos2
+layout(std430, binding = 2) buffer Rot1
+{
+	vec4 Rotation_In[];
+};
+
+layout(std430, binding = 3) buffer Pos2
 {
 	vec4 Position_Out[];
 };
 
-layout(std430, binding = 3) buffer Vel2
+layout(std430, binding = 4) buffer Vel2
 {
 	vec4 Velocity_Out[];
 };
 
-layout (binding = 4, offset = 0) uniform atomic_uint Count;
+layout(std430, binding = 5) buffer Rot2
+{
+	vec4 Rotation_Out[];
+};
+
+layout (binding = 6, offset = 0) uniform atomic_uint Count;
 
 uniform uint particleCount;
 uniform uint maxParticles;
 uniform float deltaTime;
+uniform int mode;
 
-void addParticleToOutputList(vec3 pos, vec3 vel, float TTL) {
+void addParticleToOutputList(vec3 pos, vec4 vel, vec4 rot, float TTL) {
 	uint nr = atomicCounterIncrement(Count);
 	if (nr >= maxParticles) {
 		atomicCounterDecrement(Count);
@@ -36,7 +47,8 @@ void addParticleToOutputList(vec3 pos, vec3 vel, float TTL) {
 	}
 
 	Position_Out[nr] = vec4(pos, TTL);
-	Velocity_Out[nr] = vec4(vel, 0);
+	Velocity_Out[nr] = vel;
+	Rotation_Out[nr] = rot;
 }
 
 void main(void)
@@ -45,13 +57,31 @@ void main(void)
 
 	if(idx >= particleCount) return;
 
-	vec3 velocity = Velocity_In[idx].xyz;
-	vec3 pos = Position_In[idx].xyz + deltaTime * velocity;
-	velocity *= 0.9999;
-	float TTL = Position_In[idx].w - deltaTime;
+	vec4 velocity = Velocity_In[idx];
+	vec3 pos;
+	float TTL = Position_In[idx].w;
+
+	if(Velocity_In[idx].w >= 1.0)
+	{
+		pos = Position_In[idx].xyz + deltaTime * velocity.xyz;
+		velocity *= 0.9999;
+		TTL -= deltaTime;
+	}
+	else
+	{
+		velocity.w += 0.2;
+		pos = Position_In[idx].xyz;
+	}
+
+	vec4 rotation = Position_In[idx];
+
+	if (mode == 1)
+	{
+		velocity.y -= 0.25;
+	}
 
 	if (TTL > 0) 
 	{
-		addParticleToOutputList(pos, velocity, TTL);
+		addParticleToOutputList(pos, velocity, rotation, TTL);
 	}
 }
