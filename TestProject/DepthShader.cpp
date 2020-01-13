@@ -56,6 +56,7 @@ void DepthShader::use(glm::mat4 view, glm::mat4 projection)
 void DepthShader::draw(Model model)
 {
 	shader->setMat4("model", model.model);
+	shader->setBool("isInstanced", false);
 
 	for (size_t i = 0; i < model.meshes.size(); i++)
 	{

@@ -21,7 +21,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 		glm::vec3 position = global::camera->position;
 		glm::vec3 rotation = global::camera->rotation;
 
-		std::cout << "{ glm::vec3(" << position.x << "f, " << position.y << "f, " << position.z << "f), glm::vec3(" << rotation.x << "f, " << rotation.y << "f, " << rotation.z << "f), 0.0 }" << std::endl;
+		std::cout << "{ glm::vec3(" << position.x << "f, " << position.y << "f, " << position.z << "f), glm::vec3(" << rotation.x << "f, " << rotation.y << "f, " << rotation.z << "f), 0.01 }," << std::endl;
 	}
 	if (key == GLFW_KEY_C && action == GLFW_RELEASE)
 	{

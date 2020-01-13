@@ -185,7 +185,7 @@ void RenderEngine::render()
 		breakout::bricksPositionMutex.lock();
 		phongShader->drawInstanced(*modelManager->brick, breakout::bricksPosition.size());
 		breakout::bricksPositionMutex.unlock();
-		if (global::t > 0.13)
+		if (global::t > 0.135)
 		{
 			depthShader->draw(*modelManager->ball);
 			depthShader->draw(*modelManager->pad);
@@ -200,7 +200,7 @@ void RenderEngine::render()
 
 	if (global::t > 0.11)
 	{
-		if (global::t > 0.13)
+		if (global::t > 0.135)
 		{
 			phongShader->draw(*modelManager->ball, true);
 			phongShader->draw(*modelManager->pad);
@@ -344,6 +344,7 @@ int RenderEngine::init()
 
 	float speedup = 1.0f;
 	global::candylandSong->setPlaybackSpeed(speedup);
+	global::SoundEngine->setSoundVolume(0.3f);
 
 	songLength = global::candylandSong->getPlayLength() / (1000.0f * speedup);
 

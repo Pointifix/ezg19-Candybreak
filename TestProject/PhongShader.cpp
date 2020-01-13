@@ -103,7 +103,7 @@ void PhongShader::draw(Model model, bool light)
 
 void PhongShader::drawInstanced(Model model, int size)
 {
-	int level = (global::t - 0.11f) * 500.0;
+	int level = (global::t - 0.11f) * 450.0;
 	if (global::t < 0.11) level = 0;
 
 	shader->setInt("level", level);

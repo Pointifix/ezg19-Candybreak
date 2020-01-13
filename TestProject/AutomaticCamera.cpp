@@ -21,22 +21,41 @@ struct TransitionPoint {
 // the t value describes the time length of a segment
 std::vector<std::vector<ControlPoint>> curves {
 	{
-		{ glm::vec3(0.0f, 0.0f, 100.0f), glm::vec3(-0.56f, 1.28f, 0.0f)							, 0.01 },
-		{ glm::vec3(-31.91f, 2.32189f, 50.084f), glm::vec3(-36.88f, 5.12f, 0.0f)				, 0.01 },
-		{ glm::vec3(-20.7824f, 5.11993f, -12.1709f), glm::vec3(-123.12f, 8.32f, 0.0f)			, 0.01 },
-		{ glm::vec3(1.43385f, 8.71947f, -6.86863f), glm::vec3(-192.16f, 17.92f, 0.0f)			, 0.01 },
-		{ glm::vec3(0.0446262f, 10.0761f, 4.52153f), glm::vec3(-39.68f, -20.8f, 0.0f)			, 0.01 },
-		{ glm::vec3(14.1461f, 10.0225f, -0.922727f), glm::vec3(91.4401f, -6.72002f, 0.0f)		, 0.01 }
+		{ glm::vec3(6.08515f, -8.22027f, 528.232f), glm::vec3(-0.400001f, -2.80001f, 0.0f), 0.01 },
+		{ glm::vec3(8.10513f, -10.6716f, 345.332f), glm::vec3(0.399999f, 1.67999f, 0.0f), 0.01 },
+		{ glm::vec3(-12.9545f, -7.19209f, 190.49f), glm::vec3(-4.32f, -0.480012f, 0.0f), 0.01 },
+		{ glm::vec3(5.79986f, -8.53529f, 99.6339f), glm::vec3(-29.84f, -1.92001f, 3.49124f), 0.01 },
+		{ glm::vec3(44.0426f, -12.0314f, 48.8162f), glm::vec3(-41.92f, -4.08001f, -13.5041f), 0.01 },
+		{ glm::vec3(63.9712f, -17.2962f, -23.0276f), glm::vec3(5.83998f, -3.76001f, -18.1175f), 0.015 },
+		{ glm::vec3(48.4364f, -20.236f, -76.4254f), glm::vec3(98.48f, -1.20001f, -14.2328f), 0.015 },
+		{ glm::vec3(6.19351f, -19.0798f, -95.4774f), glm::vec3(171.2f, -0.320021f, -5.9279f), 0.015 },
+		{ glm::vec3(-58.5279f, -17.4675f, -92.4687f), glm::vec3(207.6f, 11.76f, -2.91814f), 0.015 },
 	},
 	{
-		{ glm::vec3(-17.2877f, -7.03546f, 19.0856f), glm::vec3(-41.7601f, 44.1599f, 0.0f)		, 0.01 },
-		{ glm::vec3(-6.05232f, 12.2233f, 5.95136f), glm::vec3(-42.96f, 25.4399f, 0.0f)			, 0.01 },
-		{ glm::vec3(-0.39438f, 16.0422f, 0.504072f), glm::vec3(-59.2001f, -18.6401f, 0.0f)		, 0.01 },
-		{ glm::vec3(2.33357f, 14.966f, -0.934069f), glm::vec3(-96.5601f, -49.76f, 0.0f)			, 0.01 },
-		{ glm::vec3(3.7011f, 13.8594f, -0.403036f), glm::vec3(-163.36f, -35.84f, 0.0f)			, 0.01 },
-		{ glm::vec3(4.1915f, 12.1712f, 2.29714f), glm::vec3(-247.52f, -21.92f, 0.0f)			, 0.01 },
-		{ glm::vec3(1.43645f, 11.3141f, 3.51381f), glm::vec3(-300.32f, -21.2f, 0.0f)			, 0.01 },
-		{ glm::vec3(-2.79711f, 10.1155f, 0.668185f), glm::vec3(-396.16f, 10.48f, 0.0f)			, 0.01 }
+		{ glm::vec3(-40.2953f, 9.17974f, 48.6856f), glm::vec3(-40.8001f, 8.71999f, 0.0f), 0.02 },
+		{ glm::vec3(-41.3118f, 3.5167f, 97.002f), glm::vec3(-22.8001f, 3.67999f, 0.0f), 0.02 },
+		{ glm::vec3(-26.0417f, 1.08776f, 135.801f), glm::vec3(-12.7201f, 1.51999f, 0.0f), 0.02 },
+		{ glm::vec3(-22.2948f, -0.267128f, 198.856f), glm::vec3(-7.68007f, -0.720006f, 0.0f), 0.02 }
+	},
+	{
+		{ glm::vec3(-47.7308f, -5.14316f, 15.7767f), glm::vec3(-86.72f, -17.36f, 0.0f), 0.01 },
+		{ glm::vec3(-25.3525f, -5.14316f, 54.0715f), glm::vec3(-36.56f, -17.52f, 0.0f), 0.01 },
+		{ glm::vec3(28.9631f, -0.786949f, 81.6015f), glm::vec3(10.96f, -17.04f, 0.0f), 0.01 }
+	},
+	{
+		{ glm::vec3(-9.61441f, -3.55723f, 142.464f), glm::vec3(-8.48f, -37.4399f, 0.0f), 0.01 },
+		{ glm::vec3(-3.72208f, -19.2102f, 109.785f), glm::vec3(-10.24f, -5.35993f, 0.0f), 0.01 },
+		{ glm::vec3(2.63327f, -18.5013f, 70.8266f), glm::vec3(-10.8f, 7.04007f, 0.0f), 0.01 },
+		{ glm::vec3(10.6918f, -10.3934f, 28.5822f), glm::vec3(-10.8f, 30.0001f, 0.0f), 0.01 },
+		{ glm::vec3(13.218f, 1.34838f, 15.0181f), glm::vec3(-8.23999f, 70.7201f, 0.0f), 0.01 },
+		{ glm::vec3(13.6715f, 21.2977f, 11.4721f), glm::vec3(-5.52f, 81.2801f, 0.0f), 0.01 },
+		{ glm::vec3(14.1666f, 40.6691f, 3.07039f), glm::vec3(-0.0799975f, 4.48009f, 0.0f), 0.01 },
+		{ glm::vec3(14.5759f, 22.4701f, -13.7353f), glm::vec3(5.68f, -87.8399f, 0.0f), 0.01 },
+		{ glm::vec3(14.5261f, 0.590445f, -14.1951f), glm::vec3(46.24f, -64.5599f, 0.0f), 0.01 },
+		{ glm::vec3(-5.10614f, -19.33f, -23.7767f), glm::vec3(108.88f, 10.2401f, -4.15411f), 0.01 },
+		{ glm::vec3(-21.5454f, -12.2036f, -3.76379f), glm::vec3(197.04f, 3.2801f, -8.36624f), 0.01 },
+		{ glm::vec3(-9.33559f, -9.71817f, 18.7713f), glm::vec3(244.16f, 4.6401f, -10.7893f), 0.01 },
+		{ glm::vec3(8.17783f, -0.43684f, 66.2926f), glm::vec3(342.0f, -5.1199f, -7.17213f), 0.01 }
 	},
 	{
 		{ glm::vec3(-121.109f, -0.348613f, 44.2004f), glm::vec3(-57.84f, -12.88f, 0.0f)			, 0.01 },
@@ -64,6 +83,8 @@ std::vector<std::vector<ControlPoint>> curves {
 // start time, end time, fade in/out
 std::vector<TransitionPoint> transitions = {
 	{ 0.00, 0.02, true },
+	{ 0.277, 0.297, false },
+	{ 0.725, 0.745, false },
 	{ 0.95, 1.0, false }
 };
 
@@ -97,8 +118,10 @@ AutomaticCamera::AutomaticCamera()
 
 	for (auto & curve : curves)
 	{
-		curve.insert(curve.begin(), curve.at(0));
-		curve.push_back(curve.at(curve.size() - 1));
+		ControlPoint add = curve.at(0);
+		curve.insert(curve.begin(), { glm::vec3(add.position), glm::vec3(0.0), add.t });
+		add = curve.at(curve.size() - 1);
+		curve.push_back({ glm::vec3(add.position), glm::vec3(0.0), add.t });
 	}
 
 	currentIndices = {0,0};
@@ -164,7 +187,7 @@ void AutomaticCamera::update()
 
 	this->position = glm::catmullRom(currentControlPoints[0].position, currentControlPoints[1].position, currentControlPoints[2].position, currentControlPoints[3].position, localT);
 	glm::vec3 newRotation = glm::catmullRom(currentControlPoints[0].rotation, currentControlPoints[1].rotation, currentControlPoints[2].rotation, currentControlPoints[3].rotation, localT);
-
+	
 	setYaw(newRotation.x);
 	setPitch(newRotation.y);
 	setRoll(newRotation.z);
