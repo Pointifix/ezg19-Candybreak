@@ -57,6 +57,8 @@ namespace global
 	extern std::vector<particleSystem> particleSystemsToAdd;
 
 	extern float currentTransitionGrayness;
+
+	extern bool spotLightsOn;
 }
 
 namespace breakout

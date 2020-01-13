@@ -35,8 +35,7 @@ void LogicEngine::run()
 		lastFrame = currentFrame;
 
 		// time measurement start
-
-		if (global::t < 1.0 && global::t > 0)
+		if (global::t < 1.0 && global::t > 0.13)
 		{
 			breakoutObj->update();
 		}

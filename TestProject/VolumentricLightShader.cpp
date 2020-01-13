@@ -30,6 +30,8 @@ void VolumetricLightShader::perform(glm::mat4 view, glm::mat4 projection, GLuint
 	shader->setInt("lightDepthMap", 1);
 	glBindTexture(GL_TEXTURE_2D, lightDepthMap);
 
+	shader->setBool("spotLightsOn", global::spotLightsOn);
+
 	shader->setVec3("directionalLight.position", global::directionalLight->position);
 
 	shader->setVec3("directionalLight.direction", global::directionalLight->direction);

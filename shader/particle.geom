@@ -43,6 +43,7 @@ float rand(vec2 co){
 void main() {
 	float TTL = gl_in[0].gl_Position.w;
 	float size = .2 * TTL;
+	if (mode == 0) size *= 3;
 
 	//vec3 right = vec3(V[0][0], V[1][0], V[2][0]) * size;
 	//vec3 up = vec3(V[0][1], V[1][1], V[2][1]) * size;
@@ -51,21 +52,19 @@ void main() {
 	vec3 up = rotate(vec3(V[0][1], V[1][1], V[2][1]), rotation[0].xyz * TTL) * size;
 
 	vec3 particleColor = systemColor;
-	if(mode == 1)
-	{
-		float randomNumber = rand(vec2(gl_PrimitiveIDIn));
 
-		const vec4 colorarray[7] = {
-			vec4(0.0, 0.0, 10.0, 1.0),
-			vec4(0.0, 10.0, 0.0, 1.0),
-			vec4(0.0, 10.0, 10.0, 1.0),
-			vec4(10.0, 0.0, 0.0, 1.0),
-			vec4(10.0, 0.0, 10.0, 1.0),
-			vec4(10.0, 1.0, 0.0, 1.0),
-			vec4(10.0, 0.0, 10.0, 1.0)
-		};
-		particleColor = vec3(colorarray[int(randomNumber * 7) % 7]);
-	}
+	float randomNumber = rand(vec2(gl_PrimitiveIDIn));
+
+	const vec4 colorarray[7] = {
+		vec4(0.0, 0.0, 10.0, 1.0),
+		vec4(0.0, 10.0, 0.0, 1.0),
+		vec4(0.0, 10.0, 10.0, 1.0),
+		vec4(10.0, 0.0, 0.0, 1.0),
+		vec4(10.0, 0.0, 10.0, 1.0),
+		vec4(10.0, 1.0, 0.0, 1.0),
+		vec4(10.0, 0.0, 10.0, 1.0)
+	};
+	particleColor = vec3(colorarray[int(randomNumber * 7) % 7]);
 
     vec3 P = gl_in[0].gl_Position.xyz;
 

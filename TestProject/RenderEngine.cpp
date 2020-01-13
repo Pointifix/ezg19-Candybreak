@@ -53,6 +53,12 @@ RenderEngine::~RenderEngine()
 {
 }
 
+void addConfetti() {
+	particleSystems.push_back(std::make_unique<ParticleSystem>(glm::vec3(25.0 + 6.0, -25.0, 25.0 + 6.0), 1024, glm::vec3(3.0, 3.0, 3.0), 1, glm::vec3(5.0, 45.0, 5.0)));
+	particleSystems.push_back(std::make_unique<ParticleSystem>(glm::vec3(-25.0 - 6.0, -25.0, 25.0 + 6.0), 1024, glm::vec3(3.0, 3.0, 3.0), 1, glm::vec3(-5.0, 45.0, 5.0)));
+	particleSystems.push_back(std::make_unique<ParticleSystem>(glm::vec3(25.0 + 6.0, -25.0, -25.0 - 6.0), 1024, glm::vec3(3.0, 3.0, 3.0), 1, glm::vec3(5.0, 45.0, -5.0)));
+	particleSystems.push_back(std::make_unique<ParticleSystem>(glm::vec3(-25.0 - 6.0, -25.0, -25.0 - 6.0), 1024, glm::vec3(3.0, 3.0, 3.0), 1, glm::vec3(-5.0, 45.0, -5.0)));
+}
 
 void RenderEngine::run(std::promise<int> && error)
 {
@@ -73,10 +79,12 @@ void RenderEngine::run(std::promise<int> && error)
 	glfwTerminate();
 }
 
+float previousT = 0.0f;
+
 void RenderEngine::update()
 {
 	global::windowShouldClose = glfwWindowShouldClose(global::window);
-
+	
 	currentFrame = glfwGetTime();
 	global::deltaTimeRenderEngine = currentFrame - lastFrame;
 	lastFrame = currentFrame;
@@ -88,9 +96,33 @@ void RenderEngine::update()
 	processInput();
 	global::camera->update();
 
+	// time specific events
+	if (global::t > 0.297 && previousT < 0.297)
+	{
+		global::spotLightsOn = true;
+		addConfetti();
+	}
+	if (global::t > 0.44 && previousT < 0.44)
+	{
+		global::spotLightsOn = false;
+	}
+	if (global::t > 0.375 && previousT < 0.375) addConfetti();
+	if (global::t > 0.745 && previousT < 0.745)
+	{
+		global::spotLightsOn = true;
+		addConfetti();
+	}
+	if (global::t > 0.745 && global::t < 0.97)
+	{
+		if (int(global::t * 40000) % 10 < 5) global::spotLightsOn = false;
+		else global::spotLightsOn = true;
+	}
+	if (global::t > 0.97 && previousT < 0.97) global::spotLightsOn = false;
+	if (global::t > 0.825 && previousT < 0.825) addConfetti();
+
 	// update light position -------------------------------------------------------------------------------------------------------------------------------
 
-	global::directionalLight->direction = glm::rotateX(glm::vec3(0.0f, 0.0f, 0.5f), glm::radians(666.6f * (float)global::t));
+	global::directionalLight->direction = glm::rotateX(glm::vec3(0.0f, 0.0f, 0.5f), glm::radians(690.0f * (float)global::t));
 	global::directionalLight->position = global::directionalLight->direction * (-1000.0f);
 	global::directionalLight->view = glm::lookAt(global::directionalLight->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -126,6 +158,8 @@ void RenderEngine::update()
 			particleSystems[i]->update(global::deltaTimeRenderEngine);
 		}
 	}
+
+	previousT = global::t;
 }
 
 void RenderEngine::render()
@@ -145,28 +179,41 @@ void RenderEngine::render()
 	// depthmap --------------------------------------------------------------------------------------------------------------------------------------------
 	depthShader->use(global::directionalLight->view, global::directionalLight->projection);
 	depthShader->draw(*modelManager->map);
-	breakout::bricksPositionMutex.lock();
-	phongShader->drawInstanced(*modelManager->brick, breakout::bricksPosition.size());
-	breakout::bricksPositionMutex.unlock();
-	depthShader->draw(*modelManager->ball);
-	depthShader->draw(*modelManager->pad);
+
+	if (global::t > 0.11)
+	{
+		breakout::bricksPositionMutex.lock();
+		phongShader->drawInstanced(*modelManager->brick, breakout::bricksPosition.size());
+		breakout::bricksPositionMutex.unlock();
+		if (global::t > 0.13)
+		{
+			depthShader->draw(*modelManager->ball);
+			depthShader->draw(*modelManager->pad);
+		}
+	}
 
 	depthShader->finish();
 
 	// illumination, skybox and forcefield -----------------------------------------------------------------------------------------------------------------------------
 	phongShader->use(view, projection, depthShader->depthmap);
 	phongShader->draw(*modelManager->map);
-	phongShader->draw(*modelManager->ball, true);
-	phongShader->draw(*modelManager->pad);
 
-	breakout::bricksPositionMutex.lock();
-	phongShader->drawInstanced(*modelManager->brick, breakout::bricksPosition.size());
-	breakout::bricksPositionMutex.unlock();
+	if (global::t > 0.11)
+	{
+		if (global::t > 0.13)
+		{
+			phongShader->draw(*modelManager->ball, true);
+			phongShader->draw(*modelManager->pad);
+		}
+		breakout::bricksPositionMutex.lock();
+		phongShader->drawInstanced(*modelManager->brick, breakout::bricksPosition.size());
+		breakout::bricksPositionMutex.unlock();
+	}
 
 	drawSkybox(view, projection);
 
-	forcefieldShader->drawForcefield(view, projection);
 	voidShader->draw(view, projection);
+	forcefieldShader->drawForcefield(view, projection);
 
 	// particle systems ------------------------------------------------------------------------------------------------------------------------------------
 	for (int i = 0; i < particleSystems.size(); i++)
@@ -287,11 +334,6 @@ int RenderEngine::init()
 	bloomResult = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT);
 	volumetricLightingResult = std::make_unique<FrameBuffer>(setting::SCREEN_WIDTH, setting::SCREEN_HEIGHT, GL_RGBA16F, GL_FLOAT);
 
-	particleSystems.push_back(std::make_unique<ParticleSystem>(glm::vec3(25.0 + 6.0, -25.0, 25.0 + 6.0), 1024, glm::vec3(3.0, 3.0, 3.0), 1, glm::vec3(5.0, 35.0, 5.0)));
-	particleSystems.push_back(std::make_unique<ParticleSystem>(glm::vec3(-25.0 - 6.0, -25.0, 25.0 + 6.0), 1024, glm::vec3(3.0, 3.0, 3.0), 1, glm::vec3(-5.0, 35.0, 5.0)));
-	particleSystems.push_back(std::make_unique<ParticleSystem>(glm::vec3(25.0 + 6.0, -25.0, -25.0 - 6.0), 1024, glm::vec3(3.0, 3.0, 3.0), 1, glm::vec3(5.0, 35.0, -5.0)));
-	particleSystems.push_back(std::make_unique<ParticleSystem>(glm::vec3(-25.0 - 6.0, -25.0, -25.0 - 6.0), 1024, glm::vec3(3.0, 3.0, 3.0), 1, glm::vec3(-5.0, 35.0, -5.0)));
-
 	// enable or disable music
 	global::SoundEngine = createIrrKlangDevice();
 
@@ -300,7 +342,10 @@ int RenderEngine::init()
 
 	global::candylandSong = global::SoundEngine->play2D("../assets/Candyland-Tobu.mp3", false, false, ESM_NO_STREAMING);
 
-	songLength = global::candylandSong->getPlayLength() / 1000.0f;
+	float speedup = 1.0f;
+	global::candylandSong->setPlaybackSpeed(speedup);
+
+	songLength = global::candylandSong->getPlayLength() / (1000.0f * speedup);
 
 	startTime = glfwGetTime();
 	lastFrame = startTime;

@@ -63,8 +63,8 @@ std::vector<std::vector<ControlPoint>> curves {
 // start values, end values must be in order!
 // start time, end time, fade in/out
 std::vector<TransitionPoint> transitions = {
-	{ 0.00, 0.01, true },
-	{ 0.99, 1.0, false }
+	{ 0.00, 0.02, true },
+	{ 0.95, 1.0, false }
 };
 
 TransitionPoint currentTransitionPoint;

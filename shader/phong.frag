@@ -55,6 +55,9 @@ uniform Material material;
 uniform DirectionalLight directionalLight;
 uniform SpotLight spotLights[NR_SPOTLIGHTS];
 
+uniform bool spotLightsOn;
+uniform int level;
+
 vec4 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir);
 vec4 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
@@ -75,9 +78,12 @@ void main()
 	{
 		result += CalcDirectionalLight(directionalLight, norm, viewDir);
 
-		for(int i = 0; i < NR_SPOTLIGHTS; i++)
+		if (spotLightsOn)
 		{
-			result += CalcSpotLight(spotLights[i], norm, fs_in.FragPos, viewDir);
+			for(int i = 0; i < NR_SPOTLIGHTS; i++)
+			{
+				result += CalcSpotLight(spotLights[i], norm, fs_in.FragPos, viewDir);
+			}
 		}
 
 		if (result.a > 1.0) result.a = 1.0;
@@ -102,28 +108,42 @@ vec4 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir)
 	{
 		ivec3 blockIndices;
 		blockIndices.x = int((fs_in.FragPos.x - 25) / 5) % 10;
-		blockIndices.y = int((fs_in.FragPos.y - 25) / 2.5) % 10;
+		blockIndices.y = int((fs_in.FragPos.y) / 2.5) % 10;
 		blockIndices.z = int((fs_in.FragPos.z - 25) / 5) % 10;
 
-		float randomNumber = rand(vec2(int(t * 2000) + blockIndices.x + 10 * blockIndices.y + 100 * blockIndices.z));
-
-		const vec4 colorarray[14] = {
+		const vec4 colorarray[7] = {
 			vec4(0.0, 0.0, 1.0, 1.0),
 			vec4(0.0, 1.0, 0.0, 1.0),
 			vec4(0.0, 1.0, 1.0, 1.0),
 			vec4(1.0, 0.0, 0.0, 1.0),
 			vec4(1.0, 0.0, 1.0, 1.0),
 			vec4(1.0, 1.0, 0.0, 1.0),
-			vec4(1.0, 0.0, 1.0, 1.0),
-			vec4(0.0, 0.0, 50.0, 1.0),
-			vec4(0.0, 50.0, 0.0, 1.0),
-			vec4(0.0, 50.0, 50.0, 1.0),
-			vec4(50.0, 0.0, 0.0, 1.0),
-			vec4(50.0, 0.0, 50.0, 1.0),
-			vec4(50.0, 1.0, 0.0, 1.0),
-			vec4(50.0, 0.0, 50.0, 1.0)
+			vec4(1.0, 0.0, 1.0, 1.0)
 		};
-		color = colorarray[int(randomNumber * 7 + 7) % 14];
+
+		float randomNumber = rand(vec2(int(t * 4000) + blockIndices.x + 10 * blockIndices.y + 100 * blockIndices.z));
+		if (t > 0.745)
+		{
+			const vec4 colorarray[7] = {
+				vec4(0.0, 0.0, 20.0, 1.0),
+				vec4(0.0, 20.0, 0.0, 1.0),
+				vec4(0.0, 20.0, 20.0, 1.0),
+				vec4(20.0, 0.0, 0.0, 1.0),
+				vec4(20.0, 0.0, 20.0, 1.0),
+				vec4(20.0, 1.0, 0.0, 1.0),
+				vec4(20.0, 0.0, 20.0, 1.0)
+			};
+			color = colorarray[int(randomNumber * 7) % 7];
+		}
+		else if (t > 0.297)
+		{
+			color = colorarray[((blockIndices.y) + int(t * 4000)) % 7];
+		}
+		else
+		{
+			if (level <= 10 - blockIndices.y) discard;
+			color = colorarray[(blockIndices.y) % 7];
+		}
 	}
 	else
 	{
@@ -132,10 +152,15 @@ vec4 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir)
 	}
 
     vec4 ambient = vec4(light.ambient, 1.0) * color;
-	vec4 diffuse = vec4(light.diffuse, 1.0) * diff * color;
-    vec4 specular = vec4(light.specular, 1.0) * spec * color;
-
-	float shadow = ShadowCalculation(fs_in.FragPosLightSpace, light, normal, lightDir);
+	vec4 diffuse = vec4(0);
+    vec4 specular = vec4(0);
+	float shadow = 0.0;
+	if (!spotLightsOn)
+	{
+		diffuse = vec4(light.diffuse, 1.0) * diff * color;
+		specular = vec4(light.specular, 1.0) * spec * color;
+		shadow = ShadowCalculation(fs_in.FragPosLightSpace, light, normal, lightDir);
+	}
 
     return (ambient + (1.0 - shadow) * (diffuse + specular));
 }

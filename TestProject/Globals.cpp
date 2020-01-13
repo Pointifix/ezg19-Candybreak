@@ -25,6 +25,8 @@ namespace global
 	std::vector<particleSystem> particleSystemsToAdd;
 
 	float currentTransitionGrayness;
+
+	bool spotLightsOn = false;
 }
 
 namespace breakout

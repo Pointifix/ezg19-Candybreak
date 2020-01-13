@@ -19,8 +19,9 @@ void PhongShader::use(glm::mat4 view, glm::mat4 projection, GLuint depthmap)
 
 	shader->setInt("material.diffuse", 0);
 	shader->setInt("material.specular", 1);
+	shader->setBool("spotLightsOn", global::spotLightsOn);
 
-	shader->setFloat("material.shininess", 16.0f);
+	shader->setFloat("material.shininess", 128.0f);
 
 	shader->setVec3("directionalLight.direction", global::directionalLight->direction);
 	shader->setVec3("directionalLight.ambient", global::directionalLight->ambient);
@@ -102,6 +103,11 @@ void PhongShader::draw(Model model, bool light)
 
 void PhongShader::drawInstanced(Model model, int size)
 {
+	int level = (global::t - 0.11f) * 500.0;
+	if (global::t < 0.11) level = 0;
+
+	shader->setInt("level", level);
+
 	shader->setMat4("model", model.model);
 	shader->setBool("isALight", false);
 	shader->setBool("isInstanced", true);

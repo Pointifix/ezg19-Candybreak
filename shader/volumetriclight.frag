@@ -27,7 +27,9 @@ uniform DirectionalLight directionalLight;
 
 uniform vec3 viewPos;
 
-const int NUM_SAMPLES = 128;
+uniform bool spotLightsOn;
+
+const int NUM_SAMPLES = 64;
 
 float volumetric_lighting_directional(vec3 frag_pos);
 vec3 world_pos_from_depth(float depth);
@@ -86,7 +88,7 @@ float volumetric_lighting_directional(vec3 frag_pos)
 		ray_position_worldspace += step_size_worldspace * delta_worldspace;
 	}
 
-	return min(max(light_contribution, 0.1), 1.0);
+	return min(max(light_contribution, 0.05), 1.0) * 1.5;
 }
 
 vec3 world_pos_from_depth(float depth)
