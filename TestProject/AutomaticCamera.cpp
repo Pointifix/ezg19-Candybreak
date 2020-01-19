@@ -276,6 +276,11 @@ glm::vec3 previousRotation;
 
 AutomaticCamera::AutomaticCamera()
 {
+	this->rotation = glm::vec3(0.0f);
+	this->up = this->UP;
+	this->front = this->FRONT;
+	this->right = this->RIGHT;
+
 	currentTransitionPoint = transitions[0];
 	currentTransitionPointIndex = 0;
 
