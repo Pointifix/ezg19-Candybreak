@@ -23,18 +23,18 @@ void FreeCamera::update()
 void FreeCamera::processInput()
 {
 	if (glfwGetKey(global::window, GLFW_KEY_W) == GLFW_PRESS)
-		processKeyboard(FORWARD, global::deltaTimeRenderEngine);
+		processKeyboard(FreeCameraMovement::FORWARD, global::deltaTimeRenderEngine);
 	if (glfwGetKey(global::window, GLFW_KEY_S) == GLFW_PRESS)
-		processKeyboard(BACKWARD, global::deltaTimeRenderEngine);
+		processKeyboard(FreeCameraMovement::BACKWARD, global::deltaTimeRenderEngine);
 	if (glfwGetKey(global::window, GLFW_KEY_A) == GLFW_PRESS)
-		processKeyboard(LEFT, global::deltaTimeRenderEngine);
+		processKeyboard(FreeCameraMovement::LEFT, global::deltaTimeRenderEngine);
 	if (glfwGetKey(global::window, GLFW_KEY_D) == GLFW_PRESS)
-		processKeyboard(RIGHT, global::deltaTimeRenderEngine);
+		processKeyboard(FreeCameraMovement::RIGHT, global::deltaTimeRenderEngine);
 	
 	if (glfwGetKey(global::window, GLFW_KEY_Q) == GLFW_PRESS)
-		processKeyboard(ROLLLEFT, global::deltaTimeRenderEngine);
+		processKeyboard(FreeCameraMovement::ROLLLEFT, global::deltaTimeRenderEngine);
 	if (glfwGetKey(global::window, GLFW_KEY_E) == GLFW_PRESS)
-		processKeyboard(ROLLRIGHT, global::deltaTimeRenderEngine);
+		processKeyboard(FreeCameraMovement::ROLLRIGHT, global::deltaTimeRenderEngine);
 }
 
 void FreeCamera::processMouseMovement(double xoffset, double yoffset)
@@ -49,17 +49,17 @@ void FreeCamera::processMouseMovement(double xoffset, double yoffset)
 void FreeCamera::processKeyboard(FreeCameraMovement direction, double deltaTime)
 {
 	float velocity = movementSpeed * (float)deltaTime;
-	if (direction == FORWARD)
+	if (direction == FreeCameraMovement::FORWARD)
 		position += front * velocity;
-	if (direction == BACKWARD)
+	if (direction == FreeCameraMovement::BACKWARD)
 		position -= front * velocity;
-	if (direction == LEFT)
+	if (direction == FreeCameraMovement::LEFT)
 		position -= right * velocity;
-	if (direction == RIGHT)
+	if (direction == FreeCameraMovement::RIGHT)
 		position += right * velocity;
 
-	if (direction == ROLLLEFT)
+	if (direction == FreeCameraMovement::ROLLLEFT)
 		changeRoll(rollSensitivity * -deltaTime);
-	if (direction == ROLLRIGHT)
+	if (direction == FreeCameraMovement::ROLLRIGHT)
 		changeRoll(rollSensitivity  * deltaTime);
 }

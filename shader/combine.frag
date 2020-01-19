@@ -6,7 +6,11 @@ in vec2 TexCoords;
 uniform sampler2D texture1;
 uniform sampler2D texture2;
 
+uniform sampler2D credit;
+
 uniform int mode;
+
+uniform float t;
 
 uniform float currentTransitionGrayness;
 
@@ -31,7 +35,17 @@ void main()
 			FragColor = texture(texture1, TexCoords) * texture(texture2, TexCoords);
 			break;
 		case 2:
-			FragColor = toneMapping(texture(texture1, TexCoords) + texture(texture2, TexCoords)) * (1.0 - currentTransitionGrayness);
+			if(t < 0.063)
+			{
+				vec4 creditColor;
+				if(TexCoords.x <= 0.25 && TexCoords.y <= 0.25) creditColor = (texture(credit, (TexCoords * 4)));
+				if(creditColor.a == 1) FragColor = creditColor * (1.0 - currentTransitionGrayness);
+				else FragColor = toneMapping(texture(texture1, TexCoords) + texture(texture2, TexCoords) + creditColor) * (1.0 - currentTransitionGrayness);
+			}
+			else
+			{
+				FragColor = toneMapping(texture(texture1, TexCoords) + texture(texture2, TexCoords)) * (1.0 - currentTransitionGrayness);
+			}
 			break;
 	}
 }

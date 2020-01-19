@@ -122,7 +122,7 @@ void RenderEngine::update()
 
 	// update light position -------------------------------------------------------------------------------------------------------------------------------
 
-	global::directionalLight->direction = glm::rotateX(glm::vec3(0.0f, 0.0f, 0.5f), glm::radians(690.0f * (float)global::t));
+	global::directionalLight->direction = glm::rotateX(glm::vec3(0.0f, 0.0f, 0.5f), glm::radians(730.0f * (float)global::t));
 	global::directionalLight->position = global::directionalLight->direction * (-1000.0f);
 	global::directionalLight->view = glm::lookAt(global::directionalLight->position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -337,18 +337,27 @@ int RenderEngine::init()
 	// enable or disable music
 	global::SoundEngine = createIrrKlangDevice();
 
-	if (!setting::MUSIC)
-		global::SoundEngine->setSoundVolume(0.0f);
-
 	global::candylandSong = global::SoundEngine->play2D("../assets/Candyland-Tobu.mp3", false, false, ESM_NO_STREAMING);
 
-	float speedup = 1.0f;
-	global::candylandSong->setPlaybackSpeed(speedup);
-	global::SoundEngine->setSoundVolume(0.3f);
+	
+
+	if (!setting::MUSIC)
+		global::SoundEngine->setSoundVolume(0.0f);
+	else
+		global::SoundEngine->setSoundVolume(1.0f);
+
+	const float speedup = 1.0f;
 
 	songLength = global::candylandSong->getPlayLength() / (1000.0f * speedup);
 
-	startTime = glfwGetTime();
+	//max value 0.53f
+	const float skipT = 0.0f;
+	global::t = skipT;
+
+	global::candylandSong->setPlaybackSpeed(speedup);
+	global::candylandSong->setPlayPosition((skipT * songLength) * (1000.0f / speedup));
+
+	startTime = glfwGetTime() - (skipT * songLength);
 	lastFrame = startTime;
 
 	// return 0 if everything is fine
