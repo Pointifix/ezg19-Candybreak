@@ -1,4 +1,12 @@
 1.00 - 1:28 first beat
 1:15
 2:29 - 3:14 second beat
-2:45
+2:45 0.825
+
+0.297
+0.44
+
+0.745
+0.97
+
+0.11 bricks plopping in

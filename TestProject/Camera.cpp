@@ -33,31 +33,17 @@ void Camera::changeRoll(float angle)
 	up = glm::rotate(up, glm::radians(angle), front);
 }
 
-const glm::vec3 UP = glm::vec3(0.0f, 1.0f, 0.0f);
-const glm::vec3 FRONT = glm::vec3(0.0f, 0.0f, -1.0f);
-const glm::vec3 RIGHT = glm::vec3(1.0f, 0.0f, 0.0f);
-
 void Camera::setYaw(float angle)
 {
-	this->rotation.x = angle;
-
-	front = glm::rotateY(FRONT, glm::radians(angle));
-	up = glm::rotateY(UP, glm::radians(angle));
-	right = glm::rotateY(RIGHT, glm::radians(angle));
+	changeYaw(angle - this->rotation.x);
 }
 
 void Camera::setPitch(float angle)
 {
-	this->rotation.y = angle;
-
-	front = glm::rotate(front, glm::radians(angle), RIGHT);
-	up = glm::rotate(up, glm::radians(angle), RIGHT);
+	changePitch(angle - this->rotation.y);
 }
 
 void Camera::setRoll(float angle)
 {
-	this->rotation.z = angle;
-
-	right = glm::rotate(right, glm::radians(angle), FRONT);
-	up = glm::rotate(up, glm::radians(angle), FRONT);
+	changeRoll(angle - this->rotation.z);
 }

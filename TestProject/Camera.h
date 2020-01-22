@@ -4,12 +4,16 @@
 class Camera
 {
 public:
+	const glm::vec3 UP = glm::vec3(0.0f, 1.0f, 0.0f);
+	const glm::vec3 FRONT = glm::vec3(0.0f, 0.0f, -1.0f);
+	const glm::vec3 RIGHT = glm::vec3(1.0f, 0.0f, 0.0f);
+
 	glm::vec3 position; //x y z
 	glm::vec3 rotation; //yaw pitch roll
 
-	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 right = glm::vec3(1.0f, 0.0f, 0.0f);
+	glm::vec3 up = UP;
+	glm::vec3 front = FRONT;
+	glm::vec3 right = RIGHT;
 
 	glm::mat4 getViewMatrix();
 	virtual void update() = 0;
